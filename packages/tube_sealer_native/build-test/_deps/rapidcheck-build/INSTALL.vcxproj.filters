@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\CMakeFiles\24564c602438148955164734d20b8deb\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{F28AB3D4-2110-32BA-AE14-5621ADAC5E41}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

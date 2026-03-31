@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\src\tube_sealer_native.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{C4372511-36E7-3522-A891-65D9B1C9ED2D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

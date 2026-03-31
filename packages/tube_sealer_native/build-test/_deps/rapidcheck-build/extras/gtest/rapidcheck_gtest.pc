@@ -1,0 +1,9 @@
+Name: rapidcheck_gtest
+Description: gtest headers for rapidcheck
+Version: 
+Requires: rapidcheck
+prefix=C:/Program Files (x86)/tube_sealer_native_library
+includedir=${prefix}/include
+libdir=${prefix}/lib
+Libs: 
+Cflags: -I${includedir}

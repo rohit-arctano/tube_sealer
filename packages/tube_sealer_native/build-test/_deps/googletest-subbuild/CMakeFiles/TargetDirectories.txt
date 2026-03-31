@@ -1,0 +1,3 @@
+C:/Users/rohit/Documents/application/tube_sealer/packages/tube_sealer_native/build-test/_deps/googletest-subbuild/CMakeFiles/googletest-populate.dir
+C:/Users/rohit/Documents/application/tube_sealer/packages/tube_sealer_native/build-test/_deps/googletest-subbuild/CMakeFiles/ALL_BUILD.dir
+C:/Users/rohit/Documents/application/tube_sealer/packages/tube_sealer_native/build-test/_deps/googletest-subbuild/CMakeFiles/ZERO_CHECK.dir

@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-subbuild\CMakeFiles\d12d64efc236241669bd54726981c051\rapidcheck-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-subbuild\CMakeFiles\d12d64efc236241669bd54726981c051\rapidcheck-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-subbuild\CMakeFiles\d12d64efc236241669bd54726981c051\rapidcheck-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-subbuild\CMakeFiles\d12d64efc236241669bd54726981c051\rapidcheck-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-subbuild\CMakeFiles\d12d64efc236241669bd54726981c051\rapidcheck-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-subbuild\CMakeFiles\d12d64efc236241669bd54726981c051\rapidcheck-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-subbuild\CMakeFiles\d12d64efc236241669bd54726981c051\rapidcheck-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-subbuild\CMakeFiles\d12d64efc236241669bd54726981c051\rapidcheck-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-subbuild\CMakeFiles\53d8b5caf98d1027bcd0a74cb4b041c0\rapidcheck-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-subbuild\CMakeFiles\992efca6df911853a77834df8b1abe9a\rapidcheck-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-subbuild\CMakeFiles\rapidcheck-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{A6ED8723-FA9A-35AB-A1CE-B740B61DE9CF}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/Users/rohit/Documents/application/tube_sealer/packages/tube_sealer_native/build-test/_deps/googletest-subbuild/CMakeFiles/googletest-populate"
+		},
+		{
+			"file" : "C:/Users/rohit/Documents/application/tube_sealer/packages/tube_sealer_native/build-test/_deps/googletest-subbuild/CMakeFiles/0c0e6951ebc029193671ccf566b66875/googletest-populate.rule"
+		},
+		{
+			"file" : "C:/Users/rohit/Documents/application/tube_sealer/packages/tube_sealer_native/build-test/_deps/googletest-subbuild/CMakeFiles/336f85cc57edbfb9dc153bc52a029f4a/googletest-populate-complete.rule"
+		},
+		{
+			"file" : "C:/Users/rohit/Documents/application/tube_sealer/packages/tube_sealer_native/build-test/_deps/googletest-subbuild/CMakeFiles/acc8172444324a9bfa6c6785414e1e18/googletest-populate-build.rule"
+		},
+		{
+			"file" : "C:/Users/rohit/Documents/application/tube_sealer/packages/tube_sealer_native/build-test/_deps/googletest-subbuild/CMakeFiles/acc8172444324a9bfa6c6785414e1e18/googletest-populate-configure.rule"
+		},
+		{
+			"file" : "C:/Users/rohit/Documents/application/tube_sealer/packages/tube_sealer_native/build-test/_deps/googletest-subbuild/CMakeFiles/acc8172444324a9bfa6c6785414e1e18/googletest-populate-download.rule"
+		},
+		{
+			"file" : "C:/Users/rohit/Documents/application/tube_sealer/packages/tube_sealer_native/build-test/_deps/googletest-subbuild/CMakeFiles/acc8172444324a9bfa6c6785414e1e18/googletest-populate-install.rule"
+		},
+		{
+			"file" : "C:/Users/rohit/Documents/application/tube_sealer/packages/tube_sealer_native/build-test/_deps/googletest-subbuild/CMakeFiles/acc8172444324a9bfa6c6785414e1e18/googletest-populate-mkdir.rule"
+		},
+		{
+			"file" : "C:/Users/rohit/Documents/application/tube_sealer/packages/tube_sealer_native/build-test/_deps/googletest-subbuild/CMakeFiles/acc8172444324a9bfa6c6785414e1e18/googletest-populate-patch.rule"
+		},
+		{
+			"file" : "C:/Users/rohit/Documents/application/tube_sealer/packages/tube_sealer_native/build-test/_deps/googletest-subbuild/CMakeFiles/acc8172444324a9bfa6c6785414e1e18/googletest-populate-test.rule"
+		},
+		{
+			"file" : "C:/Users/rohit/Documents/application/tube_sealer/packages/tube_sealer_native/build-test/_deps/googletest-subbuild/CMakeFiles/acc8172444324a9bfa6c6785414e1e18/googletest-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"googletest-populate"
+		],
+		"name" : "googletest-populate"
+	}
+}

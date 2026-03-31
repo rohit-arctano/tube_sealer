@@ -1,0 +1,10 @@
+^C:\USERS\ROHIT\DOCUMENTS\APPLICATION\TUBE_SEALER\PACKAGES\TUBE_SEALER_NATIVE\BUILD-TEST\_DEPS\RAPIDCHECK-SUBBUILD\CMAKEFILES\992EFCA6DF911853A77834DF8B1ABE9A\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/rohit/Documents/application/tube_sealer/packages/tube_sealer_native/build-test/_deps/rapidcheck-subbuild -BC:/Users/rohit/Documents/application/tube_sealer/packages/tube_sealer_native/build-test/_deps/rapidcheck-subbuild --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/rohit/Documents/application/tube_sealer/packages/tube_sealer_native/build-test/_deps/rapidcheck-subbuild/rapidcheck-populate.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

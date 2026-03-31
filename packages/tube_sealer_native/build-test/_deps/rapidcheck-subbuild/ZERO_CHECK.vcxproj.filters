@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-subbuild\CMakeFiles\992efca6df911853a77834df8b1abe9a\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{A6ED8723-FA9A-35AB-A1CE-B740B61DE9CF}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

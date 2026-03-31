@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\BeforeMinimalTestCase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\Check.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\Classify.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\GenerationFailure.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\Log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\Random.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\Show.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\Any.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\Assertions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\Base64.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\Configuration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\DefaultTestListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\FrequencyMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\ImplicitParam.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\LogTestListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\MapParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\MulticastTestListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\ParseException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\Platform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\Property.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\PropertyContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\ReproduceListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\Results.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\Serialization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\StringSerialization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\TestMetadata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\TestParams.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\detail\Testing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\gen\Numeric.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\gen\Text.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\gen\detail\ExecHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\gen\detail\GenerationHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\gen\detail\Recipe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\src\gen\detail\ScaleInteger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\rohit\Documents\application\tube_sealer\packages\tube_sealer_native\build-test\_deps\rapidcheck-src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{C4372511-36E7-3522-A891-65D9B1C9ED2D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

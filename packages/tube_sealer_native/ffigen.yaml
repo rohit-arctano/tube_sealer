@@ -1,0 +1,15 @@
+# Run with `dart run ffigen --config ffigen.yaml`.
+name: TubeSealerNativeBindings
+description: |
+  Bindings for `src/tube_sealer_native.h`.
+
+  Regenerate bindings with `dart run ffigen --config ffigen.yaml`.
+output: 'lib/tube_sealer_native_bindings_generated.dart'
+headers:
+  entry-points:
+    - 'src/tube_sealer_native.h'
+  include-directives:
+    - 'src/tube_sealer_native.h'
+comments:
+  style: any
+  length: full
