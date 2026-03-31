@@ -18,7 +18,7 @@ class CycleCounterCard extends StatelessWidget {
           Expanded(
             child: _Counter(label: AppStrings.todayLabel, value: today),
           ),
-          Container(width: 1, height: 40, color: const Color(0xFFD0D8E0)),
+          Container(width: 1, height: 40, color: const Color(0xFFFFFFFF)),
           Expanded(
             child: _Counter(label: AppStrings.totalLabel, value: total),
           ),

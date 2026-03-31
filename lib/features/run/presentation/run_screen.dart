@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../app/constants/app_sizes.dart';
+import '../../../core/config/display_config.dart';
 import '../../../core/services/machine_service.dart';
+import '../../../core/services/responsive_service.dart';
 import '../controller/run_controller.dart';
 import 'widgets/live_parameter_card.dart';
 import 'widgets/result_banner.dart';
@@ -36,12 +37,19 @@ class _RunScreenState extends State<RunScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final r = Responsive(displayConfig, MediaQuery.of(context).size);
+
     return ListenableBuilder(
       listenable: _ctrl,
       builder: (context, _) {
         final s = _ctrl.state;
         return SingleChildScrollView(
-          padding: const EdgeInsets.all(AppSizes.md),
+          padding: EdgeInsets.fromLTRB(
+            r.scaled(10),
+            0,
+            r.scaled(10),
+            r.scaled(10),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -52,11 +60,10 @@ class _RunScreenState extends State<RunScreen> {
               ),
               LiveParameterCard(
                 temperature: s.currentTemperature,
-                targetTemperature:
-                    s.selectedRecipe?.targetTemperature ?? 0,
+                targetTemperature: s.selectedRecipe?.targetTemperature ?? 0,
               ),
               ResultBanner(result: s.cycleResult),
-              const SizedBox(height: AppSizes.lg),
+              SizedBox(height: r.scaled(10)),
               RunActionButtons(
                 isRunning: s.currentStep.isActive,
                 onStop: _ctrl.stop,

@@ -5,6 +5,9 @@ import '../../../app/constants/app_strings.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
 import '../../../app/widgets/info_card.dart';
+import '../../../core/config/display_config.dart';
+import '../../../core/services/responsive_service.dart';
+import '../../../widget/components/ui_components.dart';
 import '../controller/recipe_controller.dart';
 
 class RecipeScreen extends StatefulWidget {
@@ -28,6 +31,8 @@ class _RecipeScreenState extends State<RecipeScreen> {
     'TPE (Tuflux® TPE)',
   ];
 
+  List<String> get _materialOptions => ['All Materials', ..._materials];
+
   List<RecipeModel> get _filteredRecipes {
     if (_selectedMaterial == null) return _ctrl.recipes;
     return _ctrl.recipes.where((r) => r.material == _selectedMaterial).toList();
@@ -47,6 +52,10 @@ class _RecipeScreenState extends State<RecipeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final r = Responsive(displayConfig, MediaQuery.of(context).size);
+    final selectedMaterialIndex =
+        _selectedMaterial == null ? 0 : _materialOptions.indexOf(_selectedMaterial!);
+
     return ListenableBuilder(
       listenable: _ctrl,
       builder: (context, _) {
@@ -54,33 +63,29 @@ class _RecipeScreenState extends State<RecipeScreen> {
           padding: const EdgeInsets.all(AppSizes.md),
           child: Column(
             children: [
-              // Material filter dropdown
-              DropdownButtonFormField<String?>(
-                initialValue: _selectedMaterial,
-                decoration: const InputDecoration(
-                  labelText: 'Filter by Material',
-                  border: OutlineInputBorder(),
+              // Match the login screen dropdown styling for material filtering.
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(r.scaled(12)),
+                decoration: BoxDecoration(
+                  color: r.bgDark(),
+                  border: Border.all(color: r.borderDark(), width: 2),
                 ),
-                items: [
-                  const DropdownMenuItem<String?>(
-                    value: null,
-                    child: Text('All Materials'),
-                  ),
-                  ..._materials.map((material) => DropdownMenuItem<String?>(
-                        value: material,
-                        child: Text(material),
-                      )),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _selectedMaterial = value;
-                    // Reset selection if filtered out
-                    if (_ctrl.selected != null &&
-                        !_filteredRecipes.contains(_ctrl.selected)) {
-                      _ctrl.select( _filteredRecipes.first);
-                    }
-                  });
-                },
+                child: SpinBox(
+                  label: 'Filter by Material',
+                  options: _materialOptions,
+                  initialIndex: selectedMaterialIndex < 0 ? 0 : selectedMaterialIndex,
+                  onChanged: (index) {
+                    setState(() {
+                      _selectedMaterial = index == 0 ? null : _materialOptions[index];
+                      if (_ctrl.selected != null &&
+                          !_filteredRecipes.contains(_ctrl.selected)) {
+                        _ctrl.select(_filteredRecipes.first);
+                      }
+                    });
+                  },
+                  r: r,
+                ),
               ),
               const SizedBox(height: AppSizes.sm),
               // Recipe list — takes remaining space

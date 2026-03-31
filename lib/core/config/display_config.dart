@@ -42,9 +42,9 @@ const DisplayConfig displayConfig = DisplayConfig(
   minTouchDp: 64.0,
   baselineWidth: 360.0,
   baselineHeight: 640.0,
-  accentColor: Color(0xFFCCCCCC),
+  accentColor: Color(0xFFFFFFFF),
   bgDark: Color(0xFF111111),
   textLight: Color(0xFFFFFFFF),
-  borderDark: Color(0xFF666666),
+  borderDark: Color(0xFFFFFFFF),
 );
 

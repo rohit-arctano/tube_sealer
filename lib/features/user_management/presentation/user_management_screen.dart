@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../../core/services/auth_service.dart';
+import '../../../app/theme/app_text_styles.dart';
+import '../../../app/widgets/machine_primary_button.dart';
+import '../../../core/config/display_config.dart';
 import '../../../core/models/user.dart';
+import '../../../core/services/auth_service.dart';
+import '../../../core/services/responsive_service.dart';
+import '../../../widget/components/ui_components.dart';
 
 class UserManagementScreen extends StatefulWidget {
   @override
@@ -9,13 +14,12 @@ class UserManagementScreen extends StatefulWidget {
 
 class _UserManagementScreenState extends State<UserManagementScreen> {
   final AuthService _authService = AuthService();
-  List<User> _users = [
+  final List<User> _users = [
     User(username: 'operator1', role: UserRole.operator),
     User(username: 'supervisor1', role: UserRole.supervisor),
-  ]; // Mock data
+  ];
 
   void _addUser() {
-    // Show dialog to add user
     showDialog(
       context: context,
       builder: (context) => AddUserDialog(onAdd: (user) {
@@ -26,9 +30,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     );
   }
 
-  void _editUser(User user) {
-    // Show dialog to edit
-  }
+  void _editUser(User user) {}
 
   void _deleteUser(User user) {
     setState(() {
@@ -36,46 +38,116 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     });
   }
 
+  String _timestamp() {
+    final now = DateTime.now();
+    return '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year} '
+        '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = _authService.currentUser;
-    final canManage = user?.role == UserRole.supervisor || user?.role == UserRole.admin;
+    final canManage =
+        user?.role == UserRole.supervisor || user?.role == UserRole.admin;
+    final r = Responsive(displayConfig, MediaQuery.of(context).size);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('User Management', style: TextStyle(fontSize: 24)),
-        actions: [
-          if (canManage)
-            IconButton(
-              icon: Icon(Icons.add, size: 32),
-              onPressed: _addUser,
-            ),
-        ],
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(r.scaled(12)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              HeaderBar(
+                timestamp: _timestamp(),
+                title: 'User management',
+                username: user?.username ?? 'Supervis',
+                r: r,
+              ),
+              if (canManage) ...[
+                MachinePrimaryButton(
+                  label: 'Add User',
+                  icon: Icons.add,
+                  onPressed: _addUser,
+                ),
+                SizedBox(height: r.scaled(10)),
+              ],
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _users.length,
+                  itemBuilder: (context, index) {
+                    final item = _users[index];
+                    return Container(
+                      margin: EdgeInsets.only(bottom: r.scaled(8)),
+                      padding: EdgeInsets.all(r.scaled(10)),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(item.username, style: AppTextStyles.bodyLarge),
+                                SizedBox(height: r.scaled(4)),
+                                Text(
+                                  item.role.toString().split('.').last,
+                                  style: AppTextStyles.caption,
+                                ),
+                              ],
+                            ),
+                          ),
+                          if (canManage) ...[
+                            _ActionSquareButton(
+                              icon: Icons.edit,
+                              onTap: () => _editUser(item),
+                              r: r,
+                            ),
+                            SizedBox(width: r.scaled(8)),
+                            _ActionSquareButton(
+                              icon: Icons.delete,
+                              onTap: () => _deleteUser(item),
+                              r: r,
+                            ),
+                          ],
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-      body: ListView.builder(
-        itemCount: _users.length,
-        itemBuilder: (context, index) {
-          final user = _users[index];
-          return ListTile(
-            title: Text(user.username, style: TextStyle(fontSize: 20)),
-            subtitle: Text(user.role.toString().split('.').last, style: TextStyle(fontSize: 18)),
-            trailing: canManage
-                ? Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.edit, size: 32),
-                        onPressed: () => _editUser(user),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.delete, size: 32),
-                        onPressed: () => _deleteUser(user),
-                      ),
-                    ],
-                  )
-                : null,
-          );
-        },
+    );
+  }
+}
+
+class _ActionSquareButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+  final Responsive r;
+
+  const _ActionSquareButton({
+    required this.icon,
+    required this.onTap,
+    required this.r,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: r.scaled(40),
+        height: r.scaled(40),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.white, width: 2),
+        ),
+        child: Icon(icon, color: Colors.white, size: r.scaled(20)),
       ),
     );
   }
@@ -102,36 +174,54 @@ class _AddUserDialogState extends State<AddUserDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final r = Responsive(displayConfig, MediaQuery.of(context).size);
+    final roleOptions =
+        UserRole.values.map((role) => role.toString().split('.').last).toList();
+
     return AlertDialog(
-      title: Text('Add User', style: TextStyle(fontSize: 24)),
+      backgroundColor: r.bgDark(),
+      title: Text(
+        'Add User',
+        style: TextStyle(fontSize: 24, color: r.textLight()),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
             controller: _usernameController,
-            decoration: InputDecoration(labelText: 'Username'),
-            style: TextStyle(fontSize: 20),
+            decoration: InputDecoration(
+              labelText: 'Username',
+              labelStyle: TextStyle(color: r.textLight().withOpacity(0.85)),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: r.borderDark(), width: 1.5),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: r.accentColor(), width: 1.5),
+              ),
+            ),
+            style: TextStyle(fontSize: 20, color: r.textLight()),
           ),
-          DropdownButton<UserRole>(
-            value: _selectedRole,
-            items: UserRole.values.map((role) {
-              return DropdownMenuItem(
-                value: role,
-                child: Text(role.toString().split('.').last, style: TextStyle(fontSize: 20)),
-              );
-            }).toList(),
-            onChanged: (value) {
+          SizedBox(height: r.scaled(16)),
+          SpinBox(
+            label: 'Role',
+            options: roleOptions,
+            initialIndex: UserRole.values.indexOf(_selectedRole),
+            onChanged: (index) {
               setState(() {
-                _selectedRole = value!;
+                _selectedRole = UserRole.values[index];
               });
             },
+            r: r,
           ),
         ],
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text('Cancel', style: TextStyle(fontSize: 20)),
+          child: Text(
+            'Cancel',
+            style: TextStyle(fontSize: 20, color: r.textLight()),
+          ),
         ),
         ElevatedButton(
           onPressed: _add,

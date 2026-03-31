@@ -1,8 +1,7 @@
-// lib/widget/components/ui_components.dart
 import 'package:flutter/material.dart';
 import '../../core/services/responsive_service.dart';
 
-/// Header bar with timestamp, title, and username.
+/// Header bar with timestamp, title, and username styled like the references.
 class HeaderBar extends StatelessWidget {
   final String timestamp;
   final String title;
@@ -20,26 +19,17 @@ class HeaderBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              timestamp,
-              style: TextStyle(
-                color: r.textLight(),
-                fontSize: r.scaled(12),
-              ),
-            ),
             Expanded(
-              child: Center(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    color: r.textLight(),
-                    fontSize: r.scaled(16),
-                    fontWeight: FontWeight.w600,
-                  ),
+              child: Text(
+                timestamp,
+                style: TextStyle(
+                  color: r.textLight(),
+                  fontSize: r.scaled(11),
+                  fontFamily: 'monospace',
                 ),
               ),
             ),
@@ -47,12 +37,26 @@ class HeaderBar extends StatelessWidget {
               username,
               style: TextStyle(
                 color: r.textLight(),
-                fontSize: r.scaled(12),
+                fontSize: r.scaled(11),
+                fontFamily: 'monospace',
               ),
             ),
           ],
         ),
-        SizedBox(height: r.scaled(8)),
+        if (title.isNotEmpty) ...[
+          SizedBox(height: r.scaled(6)),
+          Text(
+            title,
+            style: TextStyle(
+              color: r.textLight(),
+              fontSize: r.scaled(26),
+              fontWeight: FontWeight.w700,
+              fontFamily: 'monospace',
+            ),
+          ),
+          SizedBox(height: r.scaled(14)),
+        ] else
+          SizedBox(height: r.scaled(8)),
       ],
     );
   }
@@ -69,23 +73,27 @@ class ScreenTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: r.scaled(12)),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: r.textLight(),
-          fontSize: r.scaled(24),
-          fontWeight: FontWeight.w700,
+      padding: EdgeInsets.symmetric(vertical: r.scaled(8)),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text,
+          style: TextStyle(
+            color: r.textLight(),
+            fontSize: r.scaled(26),
+            fontWeight: FontWeight.w700,
+            fontFamily: 'monospace',
+          ),
         ),
       ),
     );
   }
 }
 
-/// Progress bar with label and percentage.
+/// Progress bar with label and optional time.
 class ProgressPhase extends StatelessWidget {
   final String label;
-  final double progress; // 0.0 to 1.0
+  final double progress;
   final String? timeRemaining;
   final Responsive r;
 
@@ -106,43 +114,35 @@ class ProgressPhase extends StatelessWidget {
           label,
           style: TextStyle(
             color: r.textLight(),
-            fontSize: r.scaled(20),
+            fontSize: r.scaled(18),
             fontWeight: FontWeight.w600,
+            fontFamily: 'monospace',
           ),
         ),
         SizedBox(height: r.scaled(8)),
         Container(
           width: double.infinity,
-          height: r.scaled(24),
+          height: r.scaled(34),
           decoration: BoxDecoration(
+            color: Colors.black,
             border: Border.all(color: r.borderDark(), width: 2),
-            borderRadius: BorderRadius.circular(r.scaled(6)),
           ),
-          child: FractionallySizedBox(
+          child: Align(
             alignment: Alignment.centerLeft,
-            widthFactor: progress.clamp(0.0, 1.0),
-            child: Container(
-                  color: r.accentColor(),
-              child: Center(
-                child: Text(
-                  '${(progress * 100).toStringAsFixed(0)}%',
-                  style: TextStyle(
-                    color: r.bgDark(),
-                    fontSize: r.scaled(10),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+            child: FractionallySizedBox(
+              widthFactor: progress.clamp(0.0, 1.0),
+              child: Container(color: r.accentColor()),
             ),
           ),
         ),
         if (timeRemaining != null) ...[
           SizedBox(height: r.scaled(6)),
           Text(
-            'Time: $timeRemaining',
+            timeRemaining!,
             style: TextStyle(
               color: r.textLight(),
               fontSize: r.scaled(12),
+              fontFamily: 'monospace',
             ),
           ),
         ],
@@ -151,7 +151,7 @@ class ProgressPhase extends StatelessWidget {
   }
 }
 
-/// Action buttons (OK and Cancel) at the bottom-right.
+/// Bottom-right OK/Cancel icon buttons.
 class ActionBar extends StatelessWidget {
   final VoidCallback? onOk;
   final VoidCallback? onCancel;
@@ -169,66 +169,56 @@ class ActionBar extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        // OK button — filled accent for emphasis
-        SizedBox(
-          width: r.touchTargetDp(),
-          height: r.touchTargetDp(),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: onOk,
-              borderRadius: BorderRadius.circular(r.scaled(6)),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: r.accentColor(),
-                  borderRadius: BorderRadius.circular(r.scaled(6)),
-                  border: Border.all(color: r.textLight(), width: 2),
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.check,
-                    size: r.scaled(28),
-                    // color: r.bgLight(),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        SizedBox(width: r.scaled(12)),
-        // Cancel button — outline
-        SizedBox(
-          width: r.touchTargetDp(),
-          height: r.touchTargetDp(),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: onCancel,
-              borderRadius: BorderRadius.circular(r.scaled(6)),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: r.textLight(), width: 2),
-                  borderRadius: BorderRadius.circular(r.scaled(6)),
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.close,
-                    size: r.scaled(28),
-                    color: r.textLight(),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
+        if (onOk != null) _ActionIconButton(icon: Icons.check, onTap: onOk!, r: r),
+        if (onOk != null && onCancel != null) SizedBox(width: r.scaled(8)),
+        if (onCancel != null) _ActionIconButton(icon: Icons.close, onTap: onCancel!, r: r),
       ],
     );
   }
 }
 
-/// Icon grid (for menu).
+class _ActionIconButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+  final Responsive r;
+
+  const _ActionIconButton({
+    required this.icon,
+    required this.onTap,
+    required this.r,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: r.touchTargetDp(),
+      height: r.touchTargetDp(),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            decoration: BoxDecoration(
+              color: r.accentColor(),
+              border: Border.all(color: r.textLight(), width: 2),
+            ),
+            child: Center(
+              child: Icon(
+                icon,
+                size: r.scaled(28),
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Icon grid for menu-like screens.
 class IconGrid extends StatelessWidget {
-  final List<IconGridItem> items; // up to 12 items (3x4)
+  final List<IconGridItem> items;
   final ValueChanged<int>? onItemTap;
   final Responsive r;
 
@@ -246,8 +236,8 @@ class IconGrid extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        mainAxisSpacing: r.scaled(8),
-        crossAxisSpacing: r.scaled(8),
+        mainAxisSpacing: r.scaled(10),
+        crossAxisSpacing: r.scaled(10),
       ),
       itemCount: items.length,
       itemBuilder: (ctx, i) {
@@ -256,25 +246,32 @@ class IconGrid extends StatelessWidget {
           onTap: () => onItemTap?.call(i),
           child: Container(
             decoration: BoxDecoration(
+              color: Colors.black,
               border: Border.all(color: r.borderDark(), width: 2),
-              borderRadius: BorderRadius.circular(r.scaled(4)),
             ),
-            child: Stack(
-              alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  item.icon,
-                  size: r.scaled(44),
-                  color: r.textLight(),
+                Container(
+                  width: r.scaled(44),
+                  height: r.scaled(44),
+                  color: r.accentColor(),
+                  child: Icon(
+                    item.icon,
+                    size: r.scaled(26),
+                    color: Colors.black,
+                  ),
                 ),
-                Positioned(
-                  bottom: r.scaled(4),
+                SizedBox(height: r.scaled(8)),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: r.scaled(4)),
                   child: Text(
-                    '${i + 1}',
+                    item.label,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: r.accentColor(),
+                      color: r.textLight(),
                       fontSize: r.scaled(11),
-                      fontWeight: FontWeight.w700,
+                      fontFamily: 'monospace',
                     ),
                   ),
                 ),
@@ -294,7 +291,7 @@ class IconGridItem {
   IconGridItem({required this.icon, required this.label});
 }
 
-/// Simple spin box (dropdown-like selector).
+/// Reference-style selector with a white arrow box on the right.
 class SpinBox extends StatefulWidget {
   final List<String> options;
   final int initialIndex;
@@ -317,11 +314,23 @@ class SpinBox extends StatefulWidget {
 
 class _SpinBoxState extends State<SpinBox> {
   late int _selectedIndex;
+  bool _expanded = false;
 
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
+  }
+
+  @override
+  void didUpdateWidget(covariant SpinBox oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final maxIndex = widget.options.isEmpty ? 0 : widget.options.length - 1;
+    final nextIndex = widget.initialIndex.clamp(0, maxIndex);
+    if (oldWidget.initialIndex != widget.initialIndex && nextIndex != _selectedIndex) {
+      _selectedIndex = nextIndex;
+      _expanded = false;
+    }
   }
 
   @override
@@ -334,93 +343,117 @@ class _SpinBoxState extends State<SpinBox> {
           style: TextStyle(
             color: widget.r.textLight(),
             fontSize: widget.r.scaled(14),
+            fontFamily: 'monospace',
           ),
         ),
         SizedBox(height: widget.r.scaled(8)),
-        GestureDetector(
-          onTap: () => _showSelectionDialog(),
-          child: Container(
-            height: widget.r.scaled(48),
-            decoration: BoxDecoration(
-              border: Border.all(color: widget.r.borderDark(), width: 2),
-              borderRadius: BorderRadius.circular(widget.r.scaled(4)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: widget.r.scaled(12)),
-                  child: Text(
-                    widget.options[_selectedIndex],
-                    style: TextStyle(
-                      color: widget.r.textLight(),
-                      fontSize: widget.r.scaled(16),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: widget.r.scaled(12)),
-                  child: Icon(
-                    Icons.arrow_drop_down,
-                    color: widget.r.textLight(),
-                    size: widget.r.scaled(24),
-                  ),
-                ),
-              ],
-            ),
+        Container(
+          height: widget.r.scaled(48),
+          decoration: BoxDecoration(
+            color: widget.r.bgDark(),
+            border: Border.all(color: widget.r.borderDark(), width: 2),
           ),
-        ),
-      ],
-    );
-  }
-
-  void _showSelectionDialog() {
-    showDialog(
-      context: context,
-      builder: (ctx) {
-        return AlertDialog(
-          backgroundColor: widget.r.bgDark(),
-          contentPadding: EdgeInsets.zero,
-          content: SizedBox(
-            width: double.maxFinite,
-            child: ListView.builder(
-              itemCount: widget.options.length,
-              itemBuilder: (ctx, i) {
-                return GestureDetector(
-                  onTap: () {
-                    setState(() => _selectedIndex = i);
-                    widget.onChanged?.call(i);
-                    Navigator.pop(ctx);
-                  },
-                  child: Container(
-                    height: widget.r.scaled(56),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                            color: widget.r.borderDark(), width: 1),
-                      ),
-                    ),
-                    child: Center(
+          child: Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => setState(() => _expanded = !_expanded),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: widget.r.scaled(12)),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
                       child: Text(
-                        widget.options[i],
+                        widget.options[_selectedIndex],
                         style: TextStyle(
-                          color: _selectedIndex == i
-                              ? widget.r.accentColor()
-                              : widget.r.textLight(),
-                          fontSize: widget.r.scaled(18),
-                          fontWeight: _selectedIndex == i
-                              ? FontWeight.w700
-                              : FontWeight.normal,
+                          color: widget.r.textLight(),
+                          fontSize: widget.r.scaled(16),
+                          fontFamily: 'monospace',
                         ),
                       ),
                     ),
                   ),
-                );
-              },
-            ),
+                ),
+              ),
+              SizedBox(
+                width: widget.r.touchTargetDp(),
+                height: widget.r.scaled(48),
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    setState(() {
+                      _selectedIndex = (_selectedIndex + 1) % widget.options.length;
+                    });
+                    widget.onChanged?.call(_selectedIndex);
+                  },
+                  child: Container(
+                    color: widget.r.accentColor(),
+                    alignment: Alignment.center,
+                    child: Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.black,
+                      size: widget.r.scaled(28),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        );
-      },
+        ),
+        AnimatedSize(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: _expanded ? widget.r.scaled(240) : 0),
+            child: _expanded
+                ? Container(
+                    margin: EdgeInsets.only(top: widget.r.scaled(6)),
+                    decoration: BoxDecoration(
+                      color: widget.r.bgDark(),
+                      border: Border.all(color: widget.r.borderDark(), width: 2),
+                    ),
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      itemCount: widget.options.length,
+                      itemBuilder: (ctx, i) {
+                        final selected = i == _selectedIndex;
+                        return InkWell(
+                          onTap: () {
+                            setState(() {
+                              _selectedIndex = i;
+                              _expanded = false;
+                            });
+                            widget.onChanged?.call(i);
+                          },
+                          child: Container(
+                            height: widget.r.scaled(48),
+                            padding: EdgeInsets.symmetric(horizontal: widget.r.scaled(12)),
+                            decoration: BoxDecoration(
+                              color: selected ? widget.r.accentColor() : Colors.transparent,
+                              border: Border(
+                                bottom: BorderSide(color: widget.r.borderDark(), width: 1),
+                              ),
+                            ),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              widget.options[i],
+                              style: TextStyle(
+                                color: selected ? Colors.black : widget.r.textLight(),
+                                fontSize: widget.r.scaled(16),
+                                fontWeight: selected ? FontWeight.w700 : FontWeight.normal,
+                                fontFamily: 'monospace',
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ),
+        ),
+      ],
     );
   }
 }

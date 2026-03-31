@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../app/constants/app_sizes.dart';
-import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
+import '../../../app/widgets/machine_primary_button.dart';
+import '../../../core/config/display_config.dart';
 import '../../../core/services/auth_service.dart';
+import '../../../core/services/responsive_service.dart';
 import '../controller/settings_controller.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -34,49 +35,50 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _changePassword() {
+    final r = Responsive(displayConfig, MediaQuery.of(context).size);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Change Password', style: TextStyle(fontSize: 24)),
+        backgroundColor: Colors.black,
+        title: Text(
+          'Change Password',
+          style: AppTextStyles.sectionTitle,
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(
-              decoration: InputDecoration(labelText: 'Current Password'),
-              style: TextStyle(fontSize: 20),
-              keyboardType: TextInputType.number,
-              obscureText: true,
-            ),
-            SizedBox(height: 16),
-            TextField(
-              decoration: InputDecoration(labelText: 'New Password'),
-              style: TextStyle(fontSize: 20),
-              keyboardType: TextInputType.number,
-              obscureText: true,
-            ),
-            SizedBox(height: 16),
-            TextField(
-              decoration: InputDecoration(labelText: 'Confirm Password'),
-              style: TextStyle(fontSize: 20),
-              keyboardType: TextInputType.number,
-              obscureText: true,
-            ),
+            const _PasswordField(label: 'Current Password'),
+            SizedBox(height: r.scaled(12)),
+            const _PasswordField(label: 'New Password'),
+            SizedBox(height: r.scaled(12)),
+            const _PasswordField(label: 'Confirm Password'),
           ],
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text('Cancel', style: TextStyle(fontSize: 20)),
+          SizedBox(
+            width: r.touchTargetDp(),
+            height: r.touchTargetDp(),
+            child: OutlinedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              style: OutlinedButton.styleFrom(
+                padding: EdgeInsets.zero,
+                side: const BorderSide(color: Colors.white, width: 2),
+                shape: const RoundedRectangleBorder(),
+              ),
+              child: const Icon(
+                Icons.close,
+                color: Colors.white,
+              ),
+            ),
           ),
-          ElevatedButton(
+          OutlinedButton(
             onPressed: () {
-              // TODO: Implement password change logic
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Password changed successfully', style: TextStyle(fontSize: 18))),
+                const SnackBar(content: Text('Password changed successfully')),
               );
               Navigator.of(context).pop();
             },
-            child: Text('Change', style: TextStyle(fontSize: 20)),
+            child: const Text('Change'),
           ),
         ],
       ),
@@ -87,140 +89,70 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       _isDarkTheme = isDark;
     });
-    // TODO: Implement actual theme switching in main.dart
   }
 
   @override
   Widget build(BuildContext context) {
+    final r = Responsive(displayConfig, MediaQuery.of(context).size);
+
     return ListenableBuilder(
       listenable: _ctrl,
       builder: (context, _) {
         return SingleChildScrollView(
-          padding: const EdgeInsets.all(AppSizes.md),
+          padding: EdgeInsets.fromLTRB(
+            r.scaled(10),
+            0,
+            r.scaled(10),
+            r.scaled(10),
+          ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Theme Toggle
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.background,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.divider, width: 1),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              _SettingsPanel(
+                title: 'Theme',
+                r: r,
+                child: Row(
                   children: [
-                    Text(
-                      'Theme',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                    Expanded(
+                      child: _SettingsToggleButton(
+                        label: 'Light',
+                        selected: !_isDarkTheme,
+                        onTap: () => _toggleTheme(false),
                       ),
                     ),
-                    SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: () => _toggleTheme(false),
-                            icon: Icon(Icons.light_mode, size: 28),
-                            label: Text('Light', style: TextStyle(fontSize: 20)),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: !_isDarkTheme ? AppColors.primary : AppColors.surfaceVariant,
-                              foregroundColor: !_isDarkTheme ? Colors.white : AppColors.textPrimary,
-                              padding: EdgeInsets.symmetric(vertical: 12),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: () => _toggleTheme(true),
-                            icon: Icon(Icons.dark_mode, size: 28),
-                            label: Text('Dark', style: TextStyle(fontSize: 20)),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: _isDarkTheme ? AppColors.primary : AppColors.surfaceVariant,
-                              foregroundColor: _isDarkTheme ? Colors.white : AppColors.textPrimary,
-                              padding: EdgeInsets.symmetric(vertical: 12),
-                            ),
-                          ),
-                        ),
-                      ],
+                    SizedBox(width: r.scaled(8)),
+                    Expanded(
+                      child: _SettingsToggleButton(
+                        label: 'Dark',
+                        selected: _isDarkTheme,
+                        onTap: () => _toggleTheme(true),
+                      ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 20),
-              
-              // Change Password
-              SizedBox(
-                width: double.infinity,
-                height: 70,
-                child: ElevatedButton.icon(
-                  onPressed: _changePassword,
-                  icon: Icon(Icons.lock, size: 28),
-                  label: Text('Change Password', style: TextStyle(fontSize: 20)),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                  ),
-                ),
+              SizedBox(height: r.scaled(10)),
+              MachinePrimaryButton(
+                label: 'Change Password',
+                icon: Icons.lock,
+                onPressed: _changePassword,
               ),
-              SizedBox(height: 16),
-              
-              // Logout
-              SizedBox(
-                width: double.infinity,
-                height: 70,
-                child: ElevatedButton.icon(
-                  onPressed: _logout,
-                  icon: Icon(Icons.logout, size: 28),
-                  label: Text('Logout', style: TextStyle(fontSize: 20)),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryDark,
-                    foregroundColor: Colors.white,
-                  ),
-                ),
+              SizedBox(height: r.scaled(10)),
+              MachinePrimaryButton(
+                label: 'Logout',
+                icon: Icons.logout,
+                onPressed: _logout,
               ),
-              SizedBox(height: 20),
-              
-              // About
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.background,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.divider, width: 1),
-                ),
+              SizedBox(height: r.scaled(10)),
+              _SettingsPanel(
+                title: 'About',
+                r: r,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'About',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'ASL Tube Sealer',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      'Version: ${_ctrl.version}',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
+                    Text('ASL Tube Sealer', style: AppTextStyles.bodyLarge),
+                    SizedBox(height: r.scaled(6)),
+                    Text('Version: ${_ctrl.version}', style: AppTextStyles.bodyMedium),
                   ],
                 ),
               ),
@@ -228,6 +160,94 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         );
       },
+    );
+  }
+}
+
+class _SettingsPanel extends StatelessWidget {
+  final String title;
+  final Widget child;
+  final Responsive r;
+
+  const _SettingsPanel({
+    required this.title,
+    required this.child,
+    required this.r,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(r.scaled(12)),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.white, width: 2),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: AppTextStyles.sectionTitle),
+          SizedBox(height: r.scaled(10)),
+          child,
+        ],
+      ),
+    );
+  }
+}
+
+class _SettingsToggleButton extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _SettingsToggleButton({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: 48,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: selected ? Colors.white : Colors.black,
+          border: Border.all(color: Colors.white, width: 2),
+        ),
+        child: Text(
+          label,
+          style: AppTextStyles.bodyMedium.copyWith(
+            color: selected ? Colors.black : Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PasswordField extends StatelessWidget {
+  final String label;
+
+  const _PasswordField({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: AppTextStyles.caption,
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white, width: 2),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white, width: 2),
+        ),
+      ),
+      style: AppTextStyles.bodyMedium,
+      keyboardType: TextInputType.number,
+      obscureText: true,
     );
   }
 }

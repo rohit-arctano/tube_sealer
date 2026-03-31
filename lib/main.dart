@@ -4,10 +4,7 @@ import 'package:tube_sealer/features/auth/login_screen.dart';
 import 'app/theme/app_theme.dart';
 import 'core/services/mock_machine_service.dart';
 import 'core/services/screen_rotation_service.dart';
-import 'core/services/auth_service.dart';
 import 'features/shell/main_shell_screen.dart';
-import 'features/auth/presentation/login_screen.dart';
-import 'features/demo/demo_home_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,9 +58,6 @@ class _TubeSealerAppState extends State<TubeSealerApp> {
 
   @override
   Widget build(BuildContext context) {
-    final authService = AuthService();
-    final isLoggedIn = authService.currentUser != null;
-
     return MaterialApp(
       title: 'Kairish Tube Sealer',
       debugShowCheckedModeBanner: false,

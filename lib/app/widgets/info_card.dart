@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants/app_sizes.dart';
 import '../theme/app_text_styles.dart';
 
-/// Reusable card with a title row and body content.
+/// Reference-style framed panel with a title row and body content.
 class InfoCard extends StatelessWidget {
   final String title;
   final IconData? icon;
@@ -19,26 +19,30 @@ class InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(AppSizes.cardPadding),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                if (icon != null) ...[
-                  Icon(icon, size: 20, color: accentColor),
-                  const SizedBox(width: 8),
-                ],
-                Text(title, style: AppTextStyles.sectionTitle),
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.all(AppSizes.cardPadding),
+      decoration: BoxDecoration(
+        color: Colors.black,
+        border: Border.all(color: Colors.white, width: 2),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              if (icon != null) ...[
+                Icon(icon, size: 18, color: accentColor ?? Colors.white),
+                const SizedBox(width: 8),
               ],
-            ),
-            const SizedBox(height: 12),
-            child,
-          ],
-        ),
+              Text(title, style: AppTextStyles.sectionTitle),
+            ],
+          ),
+          const SizedBox(height: 12),
+          child,
+        ],
       ),
     );
   }

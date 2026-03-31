@@ -71,7 +71,6 @@ class MenuScreen extends StatelessWidget {
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(color: r.textLight(), width: 2),
-                          borderRadius: BorderRadius.circular(r.scaled(4)),
                         ),
                         child: Center(
                           child: Icon(

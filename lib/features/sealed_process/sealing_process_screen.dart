@@ -84,7 +84,6 @@ class _SealingProcessScreenState extends State<SealingProcessScreen> {
                 padding: EdgeInsets.all(r.scaled(12)),
                 decoration: BoxDecoration(
                   border: Border.all(color: r.borderDark(), width: 1),
-                  borderRadius: BorderRadius.circular(r.scaled(4)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,8 +150,6 @@ class _SealingProcessScreenState extends State<SealingProcessScreen> {
                                   : r.textLight(),
                               width: 2,
                             ),
-                            borderRadius:
-                                BorderRadius.circular(r.scaled(4)),
                           ),
                           child: Center(
                             child: Icon(
@@ -189,8 +186,6 @@ class _SealingProcessScreenState extends State<SealingProcessScreen> {
                                   : Colors.grey,
                               width: 2,
                             ),
-                            borderRadius:
-                                BorderRadius.circular(r.scaled(4)),
                           ),
                           child: Center(
                             child: Container(

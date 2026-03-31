@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../app/constants/app_sizes.dart';
 import '../../../app/constants/app_strings.dart';
-import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
+import '../../../core/config/display_config.dart';
+import '../../../core/services/responsive_service.dart';
 import '../controller/history_controller.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -29,43 +29,60 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final r = Responsive(displayConfig, MediaQuery.of(context).size);
+
     return ListenableBuilder(
       listenable: _ctrl,
       builder: (context, _) {
         return Padding(
-          padding: const EdgeInsets.all(AppSizes.md),
+          padding: EdgeInsets.fromLTRB(
+            r.scaled(10),
+            0,
+            r.scaled(10),
+            r.scaled(10),
+          ),
           child: Column(
             children: [
-              // Filter bar
               SizedBox(
-                height: 48,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: ['All', 'Pass', 'Fail'].map((f) {
-                    final selected = _ctrl.resultFilter == f;
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: ChoiceChip(
-                        label: Text(f),
-                        selected: selected,
-                        selectedColor: AppColors.primaryLight.withValues(alpha: 0.3),
-                        onSelected: (_) => _ctrl.setResultFilter(f),
+                height: r.scaled(42),
+                child: Row(
+                  children: ['All', 'Pass', 'Fail'].map((filter) {
+                    final selected = _ctrl.resultFilter == filter;
+                    return Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(right: r.scaled(6)),
+                        child: InkWell(
+                          onTap: () => _ctrl.setResultFilter(filter),
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: selected ? Colors.white : Colors.black,
+                              border: Border.all(color: Colors.white, width: 2),
+                            ),
+                            child: Text(
+                              filter,
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                color: selected ? Colors.black : Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     );
                   }).toList(),
                 ),
               ),
-              const SizedBox(height: AppSizes.sm),
-              // Table header
+              SizedBox(height: r.scaled(10)),
               Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 10),
+                padding: EdgeInsets.symmetric(
+                  horizontal: r.scaled(10),
+                  vertical: r.scaled(10),
+                ),
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceVariant,
-                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.white, width: 2),
                 ),
                 child: Row(
-                  children: [
+                  children: const [
                     _HeaderCell(AppStrings.dateColumn, flex: 2),
                     _HeaderCell(AppStrings.recipeColumn, flex: 2),
                     _HeaderCell(AppStrings.resultColumn, flex: 1),
@@ -73,23 +90,20 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 4),
-              // Rows
+              SizedBox(height: r.scaled(4)),
               Expanded(
                 child: ListView.builder(
                   itemCount: _ctrl.filteredRecords.length,
                   itemBuilder: (context, i) {
-                    final r = _ctrl.filteredRecords[i];
-                    final isPass = r.result == 'Pass';
+                    final record = _ctrl.filteredRecords[i];
                     return Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 12),
-                      decoration: BoxDecoration(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: r.scaled(10),
+                        vertical: r.scaled(10),
+                      ),
+                      decoration: const BoxDecoration(
                         border: Border(
-                          bottom: BorderSide(
-                            color: AppColors.divider,
-                            width: 0.5,
-                          ),
+                          bottom: BorderSide(color: Colors.white, width: 1),
                         ),
                       ),
                       child: Row(
@@ -97,32 +111,23 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           Expanded(
                             flex: 2,
                             child: Text(
-                              '${r.timestamp.month}/${r.timestamp.day} '
-                              '${r.timestamp.hour.toString().padLeft(2, '0')}:'
-                              '${r.timestamp.minute.toString().padLeft(2, '0')}',
+                              '${record.timestamp.month}/${record.timestamp.day} '
+                              '${record.timestamp.hour.toString().padLeft(2, '0')}:'
+                              '${record.timestamp.minute.toString().padLeft(2, '0')}',
                               style: AppTextStyles.bodyMedium,
                             ),
                           ),
                           Expanded(
                             flex: 2,
-                            child: Text(r.recipeName,
-                                style: AppTextStyles.bodyMedium),
+                            child: Text(record.recipeName, style: AppTextStyles.bodyMedium),
                           ),
                           Expanded(
                             flex: 1,
-                            child: Text(
-                              r.result,
-                              style: AppTextStyles.statusLabel.copyWith(
-                                color: isPass
-                                    ? AppColors.success
-                                    : AppColors.error,
-                              ),
-                            ),
+                            child: Text(record.result, style: AppTextStyles.bodyMedium),
                           ),
                           Expanded(
                             flex: 2,
-                            child: Text(r.operatorName,
-                                style: AppTextStyles.bodyMedium),
+                            child: Text(record.operatorName, style: AppTextStyles.bodyMedium),
                           ),
                         ],
                       ),
@@ -147,9 +152,10 @@ class _HeaderCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       flex: flex,
-      child: Text(label, style: AppTextStyles.caption.copyWith(
-        fontWeight: FontWeight.w600,
-      )),
+      child: Text(
+        label,
+        style: AppTextStyles.caption,
+      ),
     );
   }
 }

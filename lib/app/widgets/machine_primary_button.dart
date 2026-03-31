@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants/app_sizes.dart';
 import '../theme/app_text_styles.dart';
 
-/// Large, glove-friendly primary action button.
+/// Large, square, industrial-style primary action button.
 class MachinePrimaryButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
@@ -22,11 +22,14 @@ class MachinePrimaryButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       height: AppSizes.bigButton,
-      child: ElevatedButton(
+      child: OutlinedButton(
         onPressed: onPressed,
-        style: color != null
-            ? ElevatedButton.styleFrom(backgroundColor: color)
-            : null,
+        style: OutlinedButton.styleFrom(
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
+          side: BorderSide(color: color ?? Colors.white, width: 2),
+          shape: const RoundedRectangleBorder(),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

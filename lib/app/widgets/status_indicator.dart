@@ -3,7 +3,7 @@ import '../../core/models/machine_status.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 
-/// Coloured dot + label for machine status.
+/// Monochrome square marker + status label.
 class StatusIndicator extends StatelessWidget {
   final MachineStatus status;
 
@@ -20,20 +20,13 @@ class StatusIndicator extends StatelessWidget {
           height: 14,
           decoration: BoxDecoration(
             color: color,
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: color.withValues(alpha: 0.4),
-                blurRadius: 6,
-                spreadRadius: 1,
-              ),
-            ],
+            border: Border.all(color: Colors.white, width: 1.5),
           ),
         ),
         const SizedBox(width: 8),
         Text(
-          status.label,
-          style: AppTextStyles.statusLabel.copyWith(color: color),
+          status.label.toUpperCase(),
+          style: AppTextStyles.statusLabel,
         ),
       ],
     );

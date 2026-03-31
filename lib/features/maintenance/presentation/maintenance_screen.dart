@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../../core/services/auth_service.dart';
+import '../../../app/theme/app_text_styles.dart';
+import '../../../app/widgets/machine_primary_button.dart';
+import '../../../core/config/display_config.dart';
 import '../../../core/models/user.dart';
+import '../../../core/services/auth_service.dart';
+import '../../../core/services/responsive_service.dart';
+import '../../../widget/components/ui_components.dart';
 
 class MaintenanceScreen extends StatefulWidget {
   @override
@@ -9,7 +14,7 @@ class MaintenanceScreen extends StatefulWidget {
 
 class _MaintenanceScreenState extends State<MaintenanceScreen> {
   final AuthService _authService = AuthService();
-  int _cycleCount = 1000; // Mock data
+  int _cycleCount = 1000;
   bool _maintenanceDue = true;
 
   void _resetCounters() {
@@ -18,52 +23,63 @@ class _MaintenanceScreenState extends State<MaintenanceScreen> {
         _cycleCount = 0;
         _maintenanceDue = false;
       });
-      // Save to DB
     }
+  }
+
+  String _timestamp() {
+    final now = DateTime.now();
+    return '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year} '
+        '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}';
   }
 
   @override
   Widget build(BuildContext context) {
     final user = _authService.currentUser;
     final isAdmin = user?.role == UserRole.admin;
+    final r = Responsive(displayConfig, MediaQuery.of(context).size);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Maintenance', style: TextStyle(fontSize: 24)),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(r.scaled(12)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              HeaderBar(
+                timestamp: _timestamp(),
+                title: 'Maintenance',
+                username: user?.username ?? 'Supervis',
+                r: r,
+              ),
+              Container(
+                padding: EdgeInsets.all(r.scaled(12)),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white, width: 2),
+                ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Cycle Count: $_cycleCount', style: TextStyle(fontSize: 20)),
-                    SizedBox(height: 10),
+                    Text('Cycle Count', style: AppTextStyles.caption),
+                    SizedBox(height: r.scaled(6)),
+                    Text('$_cycleCount', style: AppTextStyles.bigValue),
+                    SizedBox(height: r.scaled(10)),
                     Text(
                       _maintenanceDue ? 'Maintenance Due' : 'Maintenance OK',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: _maintenanceDue ? Colors.red : Colors.green,
-                      ),
+                      style: AppTextStyles.bodyLarge,
                     ),
                   ],
                 ),
               ),
-            ),
-            SizedBox(height: 20),
-            if (isAdmin)
-              ElevatedButton(
-                onPressed: _resetCounters,
-                child: Text('Reset Counters', style: TextStyle(fontSize: 20)),
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 60),
+              const Spacer(),
+              if (isAdmin)
+                MachinePrimaryButton(
+                  label: 'Reset Counters',
+                  icon: Icons.restart_alt,
+                  onPressed: _resetCounters,
                 ),
-              ),
-            // Add more maintenance items as needed
-          ],
+            ],
+          ),
         ),
       ),
     );
