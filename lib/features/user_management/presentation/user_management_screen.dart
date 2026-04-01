@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../app/constants/app_sizes.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
 import '../../../app/widgets/machine_primary_button.dart';
@@ -51,6 +52,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     final canManage =
         user?.role == UserRole.supervisor || user?.role == UserRole.admin;
     final r = Responsive(displayConfig, MediaQuery.of(context).size);
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -83,8 +85,15 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                       margin: EdgeInsets.only(bottom: r.scaled(8)),
                       padding: EdgeInsets.all(r.scaled(10)),
                       decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        border: Border.all(color: AppColors.divider, width: 2),
+                        color: isDarkTheme ? AppColors.cardSurface : AppColors.surface,
+                        borderRadius: BorderRadius.circular(
+                          r.scaled(AppSizes.cardRadius),
+                        ),
+                        border: Border.all(
+                          color: isDarkTheme ? AppColors.panelBorder : AppColors.divider,
+                          width: 2,
+                        ),
+                        boxShadow: isDarkTheme ? AppColors.panelShadow() : null,
                       ),
                       child: Row(
                         children: [
@@ -141,16 +150,42 @@ class _ActionSquareButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        width: r.scaled(40),
-        height: r.scaled(40),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceVariant,
-          border: Border.all(color: AppColors.divider, width: 2),
+    final borderRadius = BorderRadius.circular(r.scaled(AppSizes.buttonRadius));
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: borderRadius,
+        child: Container(
+          width: r.scaled(40),
+          height: r.scaled(40),
+          decoration: BoxDecoration(
+            color: isDarkTheme ? AppColors.selectedSurfaceSoft : AppColors.surfaceVariant,
+            borderRadius: borderRadius,
+            border: Border.all(
+              color: isDarkTheme ? AppColors.panelBorderStrong : AppColors.divider,
+              width: 2,
+            ),
+            boxShadow: isDarkTheme
+                ? AppColors.panelShadow(
+                    glowColor: icon == Icons.delete
+                        ? AppColors.error
+                        : AppColors.activeAccent,
+                  )
+                : null,
+          ),
+          child: Icon(
+            icon,
+            color: isDarkTheme
+                ? (icon == Icons.delete
+                    ? AppColors.error
+                    : AppColors.activeAccent)
+                : AppColors.primaryLight,
+            size: r.scaled(20),
+          ),
         ),
-        child: Icon(icon, color: AppColors.primaryLight, size: r.scaled(20)),
       ),
     );
   }
@@ -196,9 +231,11 @@ class _AddUserDialogState extends State<AddUserDialog> {
               labelText: 'Username',
               labelStyle: TextStyle(color: r.textLight().withOpacity(0.85)),
               enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppSizes.inputRadius),
                 borderSide: BorderSide(color: r.borderDark(), width: 1.5),
               ),
               focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppSizes.inputRadius),
                 borderSide: BorderSide(color: r.accentColor(), width: 1.5),
               ),
             ),
@@ -219,11 +256,27 @@ class _AddUserDialogState extends State<AddUserDialog> {
         ],
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(
-            'Cancel',
-            style: TextStyle(fontSize: 20, color: r.textLight()),
+        SizedBox(
+          width: r.touchTargetDp(),
+          height: r.touchTargetDp(),
+          child: OutlinedButton(
+            onPressed: () => Navigator.of(context).pop(),
+            style: OutlinedButton.styleFrom(
+              padding: EdgeInsets.zero,
+              side: BorderSide(
+                color: AppColors.isDarkMode ? AppColors.panelBorder : AppColors.divider,
+                width: 2,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppSizes.buttonRadius),
+              ),
+            ),
+            child: Icon(
+              Icons.close_rounded,
+              color: AppColors.isDarkMode
+                  ? AppColors.activeAccentSoft
+                  : AppColors.primary,
+            ),
           ),
         ),
         ElevatedButton(

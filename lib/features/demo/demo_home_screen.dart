@@ -1,5 +1,6 @@
 // lib/features/demo/demo_home_screen.dart
 import 'package:flutter/material.dart';
+import '../../app/constants/app_sizes.dart';
 import '../../core/config/display_config.dart';
 import '../../core/services/responsive_service.dart';
 import '../auth/login_screen.dart';
@@ -67,7 +68,7 @@ class DemoHomeScreen extends StatelessWidget {
                 ),
                 SizedBox(height: r.scaled(12)),
                 _DemoButton(
-                  label: '2. Menu (Icon Grid)',
+                  label: '2. Menu (List)',
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (ctx) =>
@@ -117,7 +118,9 @@ class DemoHomeScreen extends StatelessWidget {
                   padding: EdgeInsets.all(r.scaled(12)),
                   decoration: BoxDecoration(
                     border: Border.all(color: r.borderDark(), width: 1),
-                    borderRadius: BorderRadius.circular(r.scaled(4)),
+                    borderRadius: BorderRadius.circular(
+                      r.scaled(AppSizes.cardRadius),
+                    ),
                   ),
                   child: Column(
                     children: [
@@ -173,7 +176,7 @@ class _DemoButton extends StatelessWidget {
         height: r.scaled(56),
         decoration: BoxDecoration(
           border: Border.all(color: r.accentColor(), width: 2),
-          borderRadius: BorderRadius.circular(r.scaled(4)),
+          borderRadius: BorderRadius.circular(r.scaled(AppSizes.buttonRadius)),
         ),
         child: Center(
           child: Text(

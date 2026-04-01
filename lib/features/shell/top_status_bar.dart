@@ -20,18 +20,14 @@ class TopStatusBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       height: AppSizes.statusBarHeight,
       padding: const EdgeInsets.symmetric(horizontal: AppSizes.md),
-      decoration: const BoxDecoration(
-        color: AppColors.primaryDark,
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x1A000000),
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
+      decoration: BoxDecoration(
+        color: isDarkTheme ? AppColors.cardSurface : AppColors.primaryDark,
+        boxShadow: AppColors.panelShadow(),
       ),
       child: Row(
         children: [
@@ -39,8 +35,11 @@ class TopStatusBar extends StatelessWidget {
             height: 32,
             width: 32,
             decoration: BoxDecoration(
-              color: AppColors.textPrimary,
+              color: isDarkTheme ? AppColors.selectedSurfaceSoft : AppColors.textPrimary,
               borderRadius: BorderRadius.circular(8),
+              border: isDarkTheme
+                  ? Border.all(color: AppColors.panelBorderStrong, width: 1.2)
+                  : null,
             ),
             padding: const EdgeInsets.all(3),
             child: Image.asset(
@@ -61,8 +60,13 @@ class TopStatusBar extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.3),
+              color: isDarkTheme
+                  ? AppColors.activeAccent.withValues(alpha: 0.12)
+                  : AppColors.primary.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(8),
+              border: isDarkTheme
+                  ? Border.all(color: AppColors.panelBorderStrong, width: 1)
+                  : null,
             ),
             child: Text(
               userRole.label,

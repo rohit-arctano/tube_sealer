@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../app/constants/app_sizes.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
 import '../../../app/widgets/machine_primary_button.dart';
@@ -38,6 +39,7 @@ class _MaintenanceScreenState extends State<MaintenanceScreen> {
     final user = _authService.currentUser;
     final isAdmin = user?.role == UserRole.admin;
     final r = Responsive(displayConfig, MediaQuery.of(context).size);
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -56,8 +58,13 @@ class _MaintenanceScreenState extends State<MaintenanceScreen> {
               Container(
                 padding: EdgeInsets.all(r.scaled(12)),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  border: Border.all(color: AppColors.divider, width: 2),
+                  color: isDarkTheme ? AppColors.cardSurface : AppColors.surface,
+                  borderRadius: BorderRadius.circular(r.scaled(AppSizes.cardRadius)),
+                  border: Border.all(
+                    color: isDarkTheme ? AppColors.panelBorder : AppColors.divider,
+                    width: 2,
+                  ),
+                  boxShadow: isDarkTheme ? AppColors.panelShadow() : null,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

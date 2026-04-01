@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../app/constants/app_sizes.dart';
 import '../../../app/constants/app_strings.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
@@ -37,6 +38,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
   @override
   Widget build(BuildContext context) {
     final r = Responsive(displayConfig, MediaQuery.of(context).size);
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
 
     return ListenableBuilder(
       listenable: _ctrl,
@@ -60,8 +62,18 @@ class _AlarmScreenState extends State<AlarmScreen> {
               Container(
                 padding: EdgeInsets.all(r.scaled(12)),
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceVariant,
-                  border: Border.all(color: AppColors.divider, width: 2),
+                  color: isDarkTheme ? AppColors.cardSurfaceRaised : AppColors.surfaceVariant,
+                  borderRadius: BorderRadius.circular(r.scaled(AppSizes.cardRadius)),
+                  border: Border.all(
+                    color: isDarkTheme ? AppColors.panelBorderStrong : AppColors.divider,
+                    width: 2,
+                  ),
+                  boxShadow: isDarkTheme
+                      ? AppColors.panelShadow(
+                          active: true,
+                          glowColor: AppColors.error,
+                        )
+                      : null,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,8 +88,13 @@ class _AlarmScreenState extends State<AlarmScreen> {
               Container(
                 padding: EdgeInsets.all(r.scaled(12)),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  border: Border.all(color: AppColors.divider, width: 2),
+                  color: isDarkTheme ? AppColors.cardSurface : AppColors.surface,
+                  borderRadius: BorderRadius.circular(r.scaled(AppSizes.cardRadius)),
+                  border: Border.all(
+                    color: isDarkTheme ? AppColors.panelBorder : AppColors.divider,
+                    width: 2,
+                  ),
+                  boxShadow: isDarkTheme ? AppColors.panelShadow() : null,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

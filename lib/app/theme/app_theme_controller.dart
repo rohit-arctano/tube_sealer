@@ -6,7 +6,7 @@ class AppThemeController extends ChangeNotifier {
 
   static final AppThemeController instance = AppThemeController._();
 
-  ThemeMode _themeMode = ThemeMode.dark;
+  ThemeMode _themeMode = ThemeMode.light;
 
   ThemeMode get themeMode => _themeMode;
   bool get isDarkMode => _themeMode == ThemeMode.dark;

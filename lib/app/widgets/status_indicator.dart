@@ -12,6 +12,8 @@ class StatusIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = AppColors.fromStatus(status);
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -20,7 +22,20 @@ class StatusIndicator extends StatelessWidget {
           height: 14,
           decoration: BoxDecoration(
             color: color,
-            border: Border.all(color: AppColors.divider, width: 1.5),
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+              color: isDarkTheme ? AppColors.panelBorderStrong : AppColors.divider,
+              width: 1.5,
+            ),
+            boxShadow: isDarkTheme
+                ? [
+                    BoxShadow(
+                      color: color.withValues(alpha: 0.45),
+                      blurRadius: 10,
+                      spreadRadius: 0.5,
+                    ),
+                  ]
+                : null,
           ),
         ),
         const SizedBox(width: 8),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../app/theme/app_colors.dart';
+import '../../app/constants/app_sizes.dart';
 import '../../core/services/responsive_service.dart';
 
 /// Header bar with timestamp, title, and username styled like the references.
@@ -8,17 +9,23 @@ class HeaderBar extends StatelessWidget {
   final String title;
   final String username;
   final Responsive r;
+  final Widget? leadingAction;
+  final Widget? trailingAction;
 
   const HeaderBar({
     required this.timestamp,
     required this.title,
     required this.username,
     required this.r,
+    this.leadingAction,
+    this.trailingAction,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -28,7 +35,7 @@ class HeaderBar extends StatelessWidget {
               child: Text(
                 timestamp,
                 style: TextStyle(
-                  color: r.textLight(),
+                  color: isDarkTheme ? AppColors.textSecondary : r.textLight(),
                   fontSize: r.scaled(11),
                   fontFamily: 'monospace',
                 ),
@@ -37,28 +44,192 @@ class HeaderBar extends StatelessWidget {
             Text(
               username,
               style: TextStyle(
-                color: r.textLight(),
+                color: isDarkTheme ? AppColors.activeAccentSoft : r.textLight(),
                 fontSize: r.scaled(11),
                 fontFamily: 'monospace',
               ),
             ),
           ],
         ),
-        if (title.isNotEmpty) ...[
+        if (title.isNotEmpty || leadingAction != null || trailingAction != null) ...[
           SizedBox(height: r.scaled(6)),
-          Text(
-            title,
-            style: TextStyle(
-              color: r.textLight(),
-              fontSize: r.scaled(26),
-              fontWeight: FontWeight.w700,
-              fontFamily: 'monospace',
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (leadingAction != null) ...[
+                leadingAction!,
+                SizedBox(width: r.scaled(12)),
+              ],
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    color: r.textLight(),
+                    fontSize: r.scaled(22),
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'monospace',
+                  ),
+                ),
+              ),
+              if (trailingAction != null) ...[
+                SizedBox(width: r.scaled(12)),
+                trailingAction!,
+              ],
+            ],
           ),
           SizedBox(height: r.scaled(14)),
         ] else
           SizedBox(height: r.scaled(8)),
       ],
+    );
+  }
+}
+
+class MenuListItem {
+  final IconData icon;
+  final String label;
+  final String subtitle;
+
+  const MenuListItem({
+    required this.icon,
+    required this.label,
+    required this.subtitle,
+  });
+}
+
+/// Vertical navigation list with a modern card-based mobile layout.
+class MenuList extends StatelessWidget {
+  final List<MenuListItem> items;
+  final int? selectedIndex;
+  final ValueChanged<int>? onItemTap;
+  final Responsive r;
+
+  const MenuList({
+    required this.items,
+    this.selectedIndex,
+    this.onItemTap,
+    required this.r,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    return ListView.separated(
+      itemCount: items.length,
+      padding: EdgeInsets.zero,
+      physics: const BouncingScrollPhysics(),
+      separatorBuilder: (_, __) => SizedBox(height: r.scaled(10)),
+      itemBuilder: (context, index) {
+        final item = items[index];
+        final selected = selectedIndex == index;
+
+        return Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(r.scaled(22)),
+            onTap: () => onItemTap?.call(index),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 180),
+              curve: Curves.easeOut,
+              padding: EdgeInsets.symmetric(
+                horizontal: r.scaled(16),
+                vertical: r.scaled(14),
+              ),
+              decoration: BoxDecoration(
+                color: selected
+                    ? (isDarkTheme ? AppColors.selectedSurface : AppColors.primary)
+                    : (isDarkTheme ? AppColors.cardSurface : AppColors.surface),
+                borderRadius: BorderRadius.circular(r.scaled(22)),
+                border: Border.all(
+                  color: selected
+                      ? (isDarkTheme ? AppColors.panelBorderStrong : AppColors.primary)
+                      : (isDarkTheme ? AppColors.panelBorder : AppColors.divider),
+                  width: selected && isDarkTheme ? 1.8 : (selected ? 0 : 1.6),
+                ),
+                boxShadow: AppColors.panelShadow(
+                  active: selected,
+                  glowColor: selected ? AppColors.activeAccent : null,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: r.scaled(48),
+                    height: r.scaled(48),
+                    decoration: BoxDecoration(
+                      color: selected
+                          ? (isDarkTheme
+                              ? AppColors.activeAccent.withValues(alpha: 0.12)
+                              : Colors.white.withValues(alpha: 0.16))
+                          : (isDarkTheme ? AppColors.cardSurfaceRaised : AppColors.surfaceVariant),
+                      borderRadius: BorderRadius.circular(r.scaled(16)),
+                      border: isDarkTheme
+                          ? Border.all(
+                              color: selected
+                                  ? AppColors.panelBorderStrong
+                                  : AppColors.panelBorder,
+                              width: 1.2,
+                            )
+                          : null,
+                    ),
+                    child: Icon(
+                      item.icon,
+                      size: r.scaled(24),
+                      color: selected
+                          ? (isDarkTheme ? AppColors.activeAccent : AppColors.textOnPrimary)
+                          : (isDarkTheme ? AppColors.inactiveAccent : AppColors.primary),
+                    ),
+                  ),
+                  SizedBox(width: r.scaled(14)),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.label,
+                          style: TextStyle(
+                            color: selected && !isDarkTheme
+                                ? AppColors.textOnPrimary
+                                : AppColors.textPrimary,
+                            fontSize: r.scaled(16),
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'monospace',
+                          ),
+                        ),
+                        SizedBox(height: r.scaled(4)),
+                        Text(
+                          item.subtitle,
+                          style: TextStyle(
+                            color: selected
+                                ? (isDarkTheme
+                                    ? AppColors.activeAccentSoft.withValues(alpha: 0.86)
+                                    : AppColors.textOnPrimary.withValues(alpha: 0.84))
+                                : (isDarkTheme
+                                    ? AppColors.inactiveAccent
+                                    : AppColors.textSecondary),
+                            fontSize: r.scaled(11),
+                            height: 1.35,
+                            fontFamily: 'monospace',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: r.scaled(10)),
+                  Icon(
+                    Icons.chevron_right_rounded,
+                    size: r.scaled(24),
+                    color: selected
+                        ? (isDarkTheme ? AppColors.activeAccent : AppColors.textOnPrimary)
+                        : (isDarkTheme ? AppColors.inactiveAccent : AppColors.primary),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -108,6 +279,9 @@ class ProgressPhase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final progressRadius = BorderRadius.circular(r.scaled(AppSizes.inputRadius));
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -125,14 +299,24 @@ class ProgressPhase extends StatelessWidget {
           width: double.infinity,
           height: r.scaled(34),
           decoration: BoxDecoration(
-            color: AppColors.surfaceVariant,
-            border: Border.all(color: r.borderDark(), width: 2),
+            color: isDarkTheme ? AppColors.cardSurfaceRaised : AppColors.surfaceVariant,
+            borderRadius: progressRadius,
+            border: Border.all(
+              color: isDarkTheme ? AppColors.panelBorder : r.borderDark(),
+              width: 2,
+            ),
+            boxShadow: isDarkTheme
+                ? AppColors.panelShadow(glowColor: AppColors.activeAccent)
+                : null,
           ),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: FractionallySizedBox(
-              widthFactor: progress.clamp(0.0, 1.0),
-              child: Container(color: r.accentColor()),
+          child: ClipRRect(
+            borderRadius: progressRadius,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: FractionallySizedBox(
+                widthFactor: progress.clamp(0.0, 1.0),
+                child: Container(color: isDarkTheme ? AppColors.activeAccent : r.accentColor()),
+              ),
             ),
           ),
         ),
@@ -170,9 +354,9 @@ class ActionBar extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        if (onOk != null) _ActionIconButton(icon: Icons.check, onTap: onOk!, r: r),
+        if (onOk != null) _ActionIconButton(icon: Icons.check_rounded, onTap: onOk!, r: r),
         if (onOk != null && onCancel != null) SizedBox(width: r.scaled(8)),
-        if (onCancel != null) _ActionIconButton(icon: Icons.close, onTap: onCancel!, r: r),
+        if (onCancel != null) _ActionIconButton(icon: Icons.close_rounded, onTap: onCancel!, r: r),
       ],
     );
   }
@@ -191,6 +375,19 @@ class _ActionIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isCloseAction = icon == Icons.close || icon == Icons.close_rounded;
+    final buttonRadius = BorderRadius.circular(r.scaled(AppSizes.buttonRadius));
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isCloseAction
+        ? (isDarkTheme ? AppColors.cardSurface : AppColors.surface)
+        : (isDarkTheme ? AppColors.selectedSurface : r.accentColor());
+    final borderColor = isCloseAction
+        ? (isDarkTheme ? AppColors.panelBorder : AppColors.divider)
+        : (isDarkTheme ? AppColors.panelBorderStrong : AppColors.primaryLight);
+    final iconColor = isCloseAction
+        ? (isDarkTheme ? AppColors.activeAccentSoft : AppColors.primary)
+        : AppColors.textOnPrimary;
+
     return SizedBox(
       width: r.touchTargetDp(),
       height: r.touchTargetDp(),
@@ -198,16 +395,27 @@ class _ActionIconButton extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
+          borderRadius: buttonRadius,
           child: Container(
             decoration: BoxDecoration(
-              color: r.accentColor(),
-              border: Border.all(color: r.textLight(), width: 2),
+              color: backgroundColor,
+              borderRadius: buttonRadius,
+              border: Border.all(
+                color: borderColor,
+                width: 2,
+              ),
+              boxShadow: isDarkTheme
+                  ? AppColors.panelShadow(
+                      active: !isCloseAction,
+                      glowColor: isCloseAction ? AppColors.activeAccentSoft : AppColors.activeAccent,
+                    )
+                  : null,
             ),
             child: Center(
               child: Icon(
                 icon,
                 size: r.scaled(28),
-                color: AppColors.textOnPrimary,
+                color: iconColor,
               ),
             ),
           ),
@@ -232,6 +440,8 @@ class IconGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -247,8 +457,13 @@ class IconGrid extends StatelessWidget {
           onTap: () => onItemTap?.call(i),
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.surface,
-              border: Border.all(color: r.borderDark(), width: 2),
+              color: isDarkTheme ? AppColors.cardSurface : AppColors.surface,
+              borderRadius: BorderRadius.circular(r.scaled(AppSizes.cardRadius)),
+              border: Border.all(
+                color: isDarkTheme ? AppColors.panelBorder : r.borderDark(),
+                width: 2,
+              ),
+              boxShadow: isDarkTheme ? AppColors.panelShadow() : null,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -256,11 +471,17 @@ class IconGrid extends StatelessWidget {
                 Container(
                   width: r.scaled(44),
                   height: r.scaled(44),
-                  color: r.accentColor(),
+                  decoration: BoxDecoration(
+                    color: isDarkTheme ? AppColors.selectedSurfaceSoft : r.accentColor(),
+                    borderRadius: BorderRadius.circular(r.scaled(AppSizes.inputRadius)),
+                    border: isDarkTheme
+                        ? Border.all(color: AppColors.panelBorderStrong, width: 1.4)
+                        : null,
+                  ),
                   child: Icon(
                     item.icon,
                     size: r.scaled(26),
-                    color: AppColors.textOnPrimary,
+                    color: isDarkTheme ? AppColors.activeAccent : AppColors.textOnPrimary,
                   ),
                 ),
                 SizedBox(height: r.scaled(8)),
@@ -270,7 +491,7 @@ class IconGrid extends StatelessWidget {
                     item.label,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: r.textLight(),
+                      color: isDarkTheme ? AppColors.inactiveAccent : r.textLight(),
                       fontSize: r.scaled(11),
                       fontFamily: 'monospace',
                     ),
@@ -336,6 +557,9 @@ class _SpinBoxState extends State<SpinBox> {
 
   @override
   Widget build(BuildContext context) {
+    final fieldRadius = BorderRadius.circular(widget.r.scaled(AppSizes.inputRadius));
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -343,62 +567,71 @@ class _SpinBoxState extends State<SpinBox> {
           widget.label,
           style: TextStyle(
             color: widget.r.textLight(),
-            fontSize: widget.r.scaled(14),
+            fontSize: widget.r.scaled(16),
+            fontWeight:FontWeight.w500,
             fontFamily: 'monospace',
           ),
         ),
         SizedBox(height: widget.r.scaled(8)),
-        Container(
-          height: widget.r.scaled(48),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            border: Border.all(color: widget.r.borderDark(), width: 2),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () => setState(() => _expanded = !_expanded),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: widget.r.scaled(12)),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        widget.options[_selectedIndex],
-                        style: TextStyle(
-                          color: widget.r.textLight(),
-                          fontSize: widget.r.scaled(16),
-                          fontFamily: 'monospace',
+        ClipRRect(
+          borderRadius: fieldRadius,
+          child: Container(
+            height: widget.r.scaled(48),
+            decoration: BoxDecoration(
+              color: isDarkTheme ? AppColors.cardSurface : AppColors.surface,
+              borderRadius: fieldRadius,
+              border: Border.all(
+                color: isDarkTheme ? AppColors.panelBorder : widget.r.borderDark(),
+                width: 2,
+              ),
+              boxShadow: isDarkTheme ? AppColors.panelShadow() : null,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => setState(() => _expanded = !_expanded),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: widget.r.scaled(12)),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          widget.options[_selectedIndex],
+                          style: TextStyle(
+                            color: widget.r.textLight(),
+                            fontSize: widget.r.scaled(16),
+                            fontFamily: 'monospace',
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: widget.r.touchTargetDp(),
-                height: widget.r.scaled(48),
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    setState(() {
-                      _selectedIndex = (_selectedIndex + 1) % widget.options.length;
-                    });
-                    widget.onChanged?.call(_selectedIndex);
-                  },
-                  child: Container(
-                    color: widget.r.accentColor(),
-                    alignment: Alignment.center,
-                    child: Icon(
-                      Icons.arrow_drop_down,
-                      color: AppColors.textOnPrimary,
-                      size: widget.r.scaled(28),
+                SizedBox(
+                  width: widget.r.touchTargetDp(),
+                  height: widget.r.scaled(48),
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      setState(() {
+                        _selectedIndex = (_selectedIndex + 1) % widget.options.length;
+                      });
+                      widget.onChanged?.call(_selectedIndex);
+                    },
+                    child: Container(
+                      color: isDarkTheme ? AppColors.activeAccent : widget.r.accentColor(),
+                      alignment: Alignment.center,
+                      child: Icon(
+                        Icons.arrow_drop_down,
+                        color: AppColors.textOnPrimary,
+                        size: widget.r.scaled(28),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         AnimatedSize(
@@ -410,8 +643,13 @@ class _SpinBoxState extends State<SpinBox> {
                 ? Container(
                     margin: EdgeInsets.only(top: widget.r.scaled(6)),
                     decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      border: Border.all(color: widget.r.borderDark(), width: 2),
+                      color: isDarkTheme ? AppColors.cardSurface : AppColors.surface,
+                      borderRadius: fieldRadius,
+                      border: Border.all(
+                        color: isDarkTheme ? AppColors.panelBorder : widget.r.borderDark(),
+                        width: 2,
+                      ),
+                      boxShadow: isDarkTheme ? AppColors.panelShadow() : null,
                     ),
                     child: ListView.builder(
                       padding: EdgeInsets.zero,
@@ -431,9 +669,30 @@ class _SpinBoxState extends State<SpinBox> {
                             height: widget.r.scaled(48),
                             padding: EdgeInsets.symmetric(horizontal: widget.r.scaled(12)),
                             decoration: BoxDecoration(
-                              color: selected ? widget.r.accentColor() : Colors.transparent,
+                              color: selected
+                                  ? (isDarkTheme
+                                      ? AppColors.selectedSurface
+                                      : widget.r.accentColor())
+                                  : Colors.transparent,
+                              borderRadius: i == 0 || i == widget.options.length - 1
+                                  ? BorderRadius.vertical(
+                                      top: i == 0
+                                          ? Radius.circular(widget.r.scaled(AppSizes.inputRadius - 2))
+                                          : Radius.zero,
+                                      bottom: i == widget.options.length - 1
+                                          ? Radius.circular(widget.r.scaled(AppSizes.inputRadius - 2))
+                                          : Radius.zero,
+                                    )
+                                  : null,
                               border: Border(
-                                bottom: BorderSide(color: widget.r.borderDark(), width: 1),
+                                bottom: BorderSide(
+                                  color: i == widget.options.length - 1
+                                      ? Colors.transparent
+                                      : (isDarkTheme
+                                          ? AppColors.panelBorder
+                                          : widget.r.borderDark()),
+                                  width: 1,
+                                ),
                               ),
                             ),
                             alignment: Alignment.centerLeft,
@@ -442,7 +701,9 @@ class _SpinBoxState extends State<SpinBox> {
                               style: TextStyle(
                                 color: selected
                                     ? AppColors.textOnPrimary
-                                    : widget.r.textLight(),
+                                    : (isDarkTheme
+                                        ? AppColors.textSecondary
+                                        : widget.r.textLight()),
                                 fontSize: widget.r.scaled(16),
                                 fontWeight: selected ? FontWeight.w700 : FontWeight.normal,
                                 fontFamily: 'monospace',

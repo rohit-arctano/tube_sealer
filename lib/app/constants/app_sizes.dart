@@ -14,7 +14,11 @@ class AppSizes {
   static const double bigButton = 72;
 
   // ── Card ──
-  static const double cardRadius = 12;
+  static const double cardRadius = 22;
+  static const double buttonRadius = 18;
+  static const double inputRadius = 16;
+  static const double dialogRadius = 24;
+  static const double chipRadius = 14;
   static const double cardPadding = 16;
 
   // ── Status bar ──

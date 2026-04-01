@@ -25,7 +25,7 @@ class Responsive {
   double touchTargetDp() => max(cfg.minTouchDp, scaled(56.0));
 
   /// Shortcut: active accent color from the current theme.
-  Color accentColor() => AppColors.primary;
+  Color accentColor() => AppColors.activeAccent;
 
   /// Shortcut: active screen background color.
   Color bgDark() => AppColors.background;
@@ -34,5 +34,5 @@ class Responsive {
   Color textLight() => AppColors.textPrimary;
 
   /// Shortcut: border color for the current theme.
-  Color borderDark() => AppColors.divider;
+  Color borderDark() => AppColors.panelBorder;
 }

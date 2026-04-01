@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../app/constants/app_sizes.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
 import '../../../app/widgets/machine_primary_button.dart';
@@ -132,11 +133,18 @@ class _ExportField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: EdgeInsets.all(r.scaled(10)),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border.all(color: AppColors.divider, width: 2),
+        color: isDarkTheme ? AppColors.cardSurface : AppColors.surface,
+        borderRadius: BorderRadius.circular(r.scaled(AppSizes.cardRadius)),
+        border: Border.all(
+          color: isDarkTheme ? AppColors.panelBorder : AppColors.divider,
+          width: 2,
+        ),
+        boxShadow: isDarkTheme ? AppColors.panelShadow() : null,
       ),
       child: Row(
         children: [
@@ -150,9 +158,32 @@ class _ExportField extends StatelessWidget {
               ],
             ),
           ),
-          IconButton(
-            onPressed: onTap,
-            icon: Icon(icon, color: AppColors.primaryLight, size: r.scaled(22)),
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(r.scaled(AppSizes.buttonRadius)),
+              child: Container(
+                width: r.scaled(40),
+                height: r.scaled(40),
+                decoration: BoxDecoration(
+                  color: isDarkTheme ? AppColors.selectedSurfaceSoft : AppColors.surfaceVariant,
+                  borderRadius: BorderRadius.circular(r.scaled(AppSizes.buttonRadius)),
+                  border: Border.all(
+                    color: isDarkTheme ? AppColors.panelBorderStrong : AppColors.divider,
+                    width: 1.6,
+                  ),
+                  boxShadow: isDarkTheme
+                      ? AppColors.panelShadow(glowColor: AppColors.activeAccent)
+                      : null,
+                ),
+                child: Icon(
+                  icon,
+                  color: isDarkTheme ? AppColors.activeAccent : AppColors.primaryLight,
+                  size: r.scaled(22),
+                ),
+              ),
+            ),
           ),
         ],
       ),

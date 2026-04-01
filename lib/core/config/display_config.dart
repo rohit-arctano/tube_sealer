@@ -31,13 +31,37 @@ class DisplayConfig {
     final diagPx = sqrt((widthPx * widthPx) + (heightPx * heightPx));
     return diagPx / diagonalInches;
   }
+
+  String get resolutionLabel => '${widthPx}x$heightPx';
+
+  double get aspectRatioValue => widthPx / heightPx;
+
+  String get aspectRatioLabel {
+    final divisor = _greatestCommonDivisor(widthPx, heightPx);
+    return '${widthPx ~/ divisor}:${heightPx ~/ divisor}';
+  }
+}
+
+int _greatestCommonDivisor(int a, int b) {
+  var x = a.abs();
+  var y = b.abs();
+
+  while (y != 0) {
+    final remainder = x % y;
+    x = y;
+    y = remainder;
+  }
+
+  return x == 0 ? 1 : x;
 }
 
 // === EDIT THIS SECTION TO CHANGE DISPLAY CONFIG ===
 // Change resolution, touch size, or colors here and rebuild.
+// Keep the design baseline stable so widget sizing stays consistent
+// even when the target device resolution/aspect ratio changes.
 const DisplayConfig displayConfig = DisplayConfig(
-  widthPx: 800,
-  heightPx: 480,
+  widthPx: 480,
+  heightPx: 800,
   diagonalInches: 5.0,
   minTouchDp: 64.0,
   baselineWidth: 360.0,

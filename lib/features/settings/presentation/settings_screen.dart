@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../app/constants/app_sizes.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_theme_controller.dart';
 import '../../../app/theme/app_text_styles.dart';
@@ -63,12 +64,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onPressed: () => Navigator.of(context).pop(),
               style: OutlinedButton.styleFrom(
                 padding: EdgeInsets.zero,
-                side: BorderSide(color: AppColors.divider, width: 2),
-                shape: const RoundedRectangleBorder(),
+                side: BorderSide(
+                  color: AppColors.isDarkMode ? AppColors.panelBorder : AppColors.divider,
+                  width: 2,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppSizes.buttonRadius),
+                ),
               ),
               child: Icon(
-                Icons.close,
-                color: AppColors.textPrimary,
+                Icons.close_rounded,
+                color: AppColors.isDarkMode
+                    ? AppColors.activeAccentSoft
+                    : AppColors.textPrimary,
               ),
             ),
           ),
@@ -183,11 +191,18 @@ class _SettingsPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: EdgeInsets.all(r.scaled(12)),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border.all(color: AppColors.divider, width: 2),
+        color: isDarkTheme ? AppColors.cardSurface : AppColors.surface,
+        borderRadius: BorderRadius.circular(r.scaled(AppSizes.cardRadius)),
+        border: Border.all(
+          color: isDarkTheme ? AppColors.panelBorder : AppColors.divider,
+          width: 2,
+        ),
+        boxShadow: isDarkTheme ? AppColors.panelShadow() : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,19 +229,42 @@ class _SettingsToggleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        height: 48,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: selected ? AppColors.primary : AppColors.surfaceVariant,
-          border: Border.all(color: AppColors.divider, width: 2),
-        ),
-        child: Text(
-          label,
-          style: AppTextStyles.bodyMedium.copyWith(
-            color: selected ? AppColors.textOnPrimary : AppColors.textPrimary,
+    final borderRadius = BorderRadius.circular(AppSizes.buttonRadius);
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: borderRadius,
+        child: Container(
+          height: 48,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: selected
+                ? (isDarkTheme ? AppColors.selectedSurface : AppColors.primary)
+                : (isDarkTheme ? AppColors.cardSurfaceRaised : AppColors.surfaceVariant),
+            borderRadius: borderRadius,
+            border: Border.all(
+              color: selected && isDarkTheme
+                  ? AppColors.panelBorderStrong
+                  : (isDarkTheme ? AppColors.panelBorder : AppColors.divider),
+              width: 2,
+            ),
+            boxShadow: isDarkTheme && selected
+                ? AppColors.panelShadow(
+                    active: true,
+                    glowColor: AppColors.activeAccent,
+                  )
+                : null,
+          ),
+          child: Text(
+            label,
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: selected && !isDarkTheme
+                  ? AppColors.textOnPrimary
+                  : AppColors.textPrimary,
+            ),
           ),
         ),
       ),
@@ -245,12 +283,20 @@ class _PasswordField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: label,
         labelStyle: AppTextStyles.caption,
-        fillColor: AppColors.surfaceVariant,
+        fillColor: AppColors.isDarkMode ? AppColors.cardSurfaceRaised : AppColors.surfaceVariant,
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.divider, width: 2),
+          borderRadius: BorderRadius.circular(AppSizes.inputRadius),
+          borderSide: BorderSide(
+            color: AppColors.isDarkMode ? AppColors.panelBorder : AppColors.divider,
+            width: 2,
+          ),
         ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primaryLight, width: 2),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppSizes.inputRadius),
+          borderSide: BorderSide(
+            color: AppColors.isDarkMode ? AppColors.activeAccent : AppColors.primaryLight,
+            width: 2,
+          ),
         ),
       ),
       style: AppTextStyles.bodyMedium,

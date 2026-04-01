@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:tube_sealer/features/auth/login_screen.dart';
 import 'app/theme/app_theme.dart';
 import 'app/theme/app_theme_controller.dart';
+import 'core/config/display_config.dart';
 import 'core/services/mock_machine_service.dart';
 import 'core/services/screen_rotation_service.dart';
 import 'features/shell/main_shell_screen.dart';
@@ -36,6 +37,7 @@ class _TubeSealerAppState extends State<TubeSealerApp> {
   final _rotation = ScreenRotationService();
   final _themeController = AppThemeController.instance;
   bool _semanticsReady = false;
+  bool _launchRatioPrinted = false;
 
   @override
   void initState() {
@@ -50,6 +52,24 @@ class _TubeSealerAppState extends State<TubeSealerApp> {
   }
 
   void _onRotation() => setState(() {});
+
+  void _printLaunchRatio(BuildContext context) {
+    if (_launchRatioPrinted) return;
+
+    final size = MediaQuery.sizeOf(context);
+    if (size.isEmpty) return;
+
+    _launchRatioPrinted = true;
+    final width = size.width.round();
+    final height = size.height.round();
+    final ratioLabel = _aspectRatioLabel(width, height);
+    final ratioValue = (size.width / size.height).toStringAsFixed(3);
+
+    debugPrint(
+      'Launch viewport: ${width}x$height | ratio: $ratioLabel ($ratioValue) | '
+      'config: ${displayConfig.resolutionLabel} (${displayConfig.aspectRatioLabel})',
+    );
+  }
 
   @override
   void dispose() {
@@ -69,6 +89,14 @@ class _TubeSealerAppState extends State<TubeSealerApp> {
           theme: AppTheme.light,
           darkTheme: AppTheme.dark,
           themeMode: _themeController.themeMode,
+          builder: (context, child) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted) {
+                _printLaunchRatio(context);
+              }
+            });
+            return child ?? const SizedBox.shrink();
+          },
           initialRoute: '/login',
           routes: {
             // '/demo': (context) => const DemoHomeScreen(),
@@ -85,4 +113,22 @@ class _TubeSealerAppState extends State<TubeSealerApp> {
       },
     );
   }
+}
+
+String _aspectRatioLabel(int width, int height) {
+  final divisor = _greatestCommonDivisor(width, height);
+  return '${width ~/ divisor}:${height ~/ divisor}';
+}
+
+int _greatestCommonDivisor(int a, int b) {
+  var x = a.abs();
+  var y = b.abs();
+
+  while (y != 0) {
+    final remainder = x % y;
+    x = y;
+    y = remainder;
+  }
+
+  return x == 0 ? 1 : x;
 }

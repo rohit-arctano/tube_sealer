@@ -30,6 +30,8 @@ constexpr const wchar_t kGetPreferredBrightnessRegValue[] = L"AppsUseLightTheme"
 static int g_active_window_count = 0;
 
 using EnableNonClientDpiScaling = BOOL __stdcall(HWND hwnd);
+using AdjustWindowRectExForDpiProc =
+    BOOL __stdcall(RECT* rect, DWORD style, BOOL menu, DWORD ex_style, UINT dpi);
 
 // Scale helper to convert logical scaler values to physical using passed in
 // scale factor
@@ -49,6 +51,27 @@ void EnableFullDpiSupportIfAvailable(HWND hwnd) {
           GetProcAddress(user32_module, "EnableNonClientDpiScaling"));
   if (enable_non_client_dpi_scaling != nullptr) {
     enable_non_client_dpi_scaling(hwnd);
+  }
+  FreeLibrary(user32_module);
+}
+
+void AdjustWindowRectForDpiIfAvailable(RECT* rect,
+                                       DWORD style,
+                                       DWORD ex_style,
+                                       UINT dpi) {
+  HMODULE user32_module = LoadLibraryA("User32.dll");
+  if (!user32_module) {
+    AdjustWindowRectEx(rect, style, FALSE, ex_style);
+    return;
+  }
+
+  auto adjust_window_rect_ex_for_dpi =
+      reinterpret_cast<AdjustWindowRectExForDpiProc*>(
+          GetProcAddress(user32_module, "AdjustWindowRectExForDpi"));
+  if (adjust_window_rect_ex_for_dpi != nullptr) {
+    adjust_window_rect_ex_for_dpi(rect, style, FALSE, ex_style, dpi);
+  } else {
+    AdjustWindowRectEx(rect, style, FALSE, ex_style);
   }
   FreeLibrary(user32_module);
 }
@@ -133,11 +156,17 @@ bool Win32Window::Create(const std::wstring& title,
   HMONITOR monitor = MonitorFromPoint(target_point, MONITOR_DEFAULTTONEAREST);
   UINT dpi = FlutterDesktopGetDpiForMonitor(monitor);
   double scale_factor = dpi / 96.0;
+  DWORD style = WS_OVERLAPPEDWINDOW;
+  DWORD ex_style = 0;
+
+  RECT window_rect = {0, 0, Scale(size.width, scale_factor),
+                      Scale(size.height, scale_factor)};
+  AdjustWindowRectForDpiIfAvailable(&window_rect, style, ex_style, dpi);
 
   HWND window = CreateWindow(
-      window_class, title.c_str(), WS_OVERLAPPEDWINDOW,
+      window_class, title.c_str(), style,
       Scale(origin.x, scale_factor), Scale(origin.y, scale_factor),
-      Scale(size.width, scale_factor), Scale(size.height, scale_factor),
+      window_rect.right - window_rect.left, window_rect.bottom - window_rect.top,
       nullptr, nullptr, GetModuleHandle(nullptr), this);
 
   if (!window) {

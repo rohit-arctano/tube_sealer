@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../app/constants/app_sizes.dart';
 import '../../../app/constants/app_strings.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
@@ -31,6 +32,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final r = Responsive(displayConfig, MediaQuery.of(context).size);
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
 
     return ListenableBuilder(
       listenable: _ctrl,
@@ -57,13 +59,31 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           child: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: selected ? AppColors.primary : AppColors.surface,
-                              border: Border.all(color: AppColors.divider, width: 2),
+                              color: selected
+                                  ? (isDarkTheme ? AppColors.selectedSurface : AppColors.primary)
+                                  : (isDarkTheme ? AppColors.cardSurface : AppColors.surface),
+                              borderRadius: BorderRadius.circular(
+                                r.scaled(AppSizes.buttonRadius),
+                              ),
+                              border: Border.all(
+                                color: selected && isDarkTheme
+                                    ? AppColors.panelBorderStrong
+                                    : (isDarkTheme
+                                        ? AppColors.panelBorder
+                                        : AppColors.divider),
+                                width: 2,
+                              ),
+                              boxShadow: isDarkTheme && selected
+                                  ? AppColors.panelShadow(
+                                      active: true,
+                                      glowColor: AppColors.activeAccent,
+                                    )
+                                  : null,
                             ),
                             child: Text(
                               filter,
                               style: AppTextStyles.bodyMedium.copyWith(
-                                color: selected
+                                color: selected && !isDarkTheme
                                     ? AppColors.textOnPrimary
                                     : AppColors.textPrimary,
                               ),
@@ -82,8 +102,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   vertical: r.scaled(10),
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceVariant,
-                  border: Border.all(color: AppColors.divider, width: 2),
+                  color: isDarkTheme ? AppColors.cardSurfaceRaised : AppColors.surfaceVariant,
+                  borderRadius: BorderRadius.circular(r.scaled(AppSizes.cardRadius)),
+                  border: Border.all(
+                    color: isDarkTheme ? AppColors.panelBorder : AppColors.divider,
+                    width: 2,
+                  ),
+                  boxShadow: isDarkTheme ? AppColors.panelShadow() : null,
                 ),
                 child: Row(
                   children: const [
@@ -101,14 +126,21 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   itemBuilder: (context, i) {
                     final record = _ctrl.filteredRecords[i];
                     return Container(
+                      margin: EdgeInsets.only(bottom: r.scaled(8)),
                       padding: EdgeInsets.symmetric(
                         horizontal: r.scaled(10),
                         vertical: r.scaled(10),
                       ),
                       decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(color: AppColors.divider, width: 1),
+                        color: isDarkTheme ? AppColors.cardSurface : AppColors.surface,
+                        borderRadius: BorderRadius.circular(
+                          r.scaled(AppSizes.inputRadius),
                         ),
+                        border: Border.all(
+                          color: isDarkTheme ? AppColors.panelBorder : AppColors.divider,
+                          width: 1.2,
+                        ),
+                        boxShadow: isDarkTheme ? AppColors.panelShadow() : null,
                       ),
                       child: Row(
                         children: [

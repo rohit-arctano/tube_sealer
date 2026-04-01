@@ -20,13 +20,35 @@ class InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final tone = accentColor ?? AppColors.activeAccent;
+
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(vertical: 6),
       padding: const EdgeInsets.all(AppSizes.cardPadding),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border.all(color: AppColors.divider, width: 2),
+        color: isDarkTheme ? AppColors.cardSurface : AppColors.surface,
+        gradient: isDarkTheme
+            ? LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  AppColors.cardSurfaceRaised,
+                  AppColors.cardSurface,
+                ],
+              )
+            : null,
+        borderRadius: BorderRadius.circular(AppSizes.cardRadius),
+        border: Border.all(
+          color: isDarkTheme ? AppColors.panelBorder : AppColors.divider,
+          width: 2,
+        ),
+        boxShadow: isDarkTheme
+            ? AppColors.panelShadow(
+                glowColor: accentColor == null ? null : tone,
+              )
+            : null,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -35,7 +57,11 @@ class InfoCard extends StatelessWidget {
           Row(
             children: [
               if (icon != null) ...[
-                Icon(icon, size: 18, color: accentColor ?? AppColors.primaryLight),
+                Icon(
+                  icon,
+                  size: 18,
+                  color: isDarkTheme ? tone : accentColor ?? AppColors.primaryLight,
+                ),
                 const SizedBox(width: 8),
               ],
               Text(title, style: AppTextStyles.sectionTitle),

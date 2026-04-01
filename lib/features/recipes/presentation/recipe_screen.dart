@@ -11,7 +11,6 @@ import '../../../widget/components/ui_components.dart';
 import '../controller/recipe_controller.dart';
 
 class RecipeScreen extends StatefulWidget {
- 
   const RecipeScreen({super.key});
 
   @override
@@ -20,22 +19,16 @@ class RecipeScreen extends StatefulWidget {
 
 class _RecipeScreenState extends State<RecipeScreen> {
   late final RecipeController _ctrl;
-  String? _selectedMaterial; // null means all materials
+  String? _selectedMaterial;
 
-  List<String> get _materials => [
-    'Silicone (Liveo™ Pharma 50)',
-    'Silicone (Pumpsil®)',
-    'Silicone (STHT-C®)',
-    'TPE (AdvantaFlex®)',
-    'TPE (C-Flex®)',
-    'TPE (Tuflux® TPE)',
-  ];
+  List<String> get _materials =>
+      _ctrl.recipes.map((recipe) => recipe.material).toSet().toList()..sort();
 
   List<String> get _materialOptions => ['All Materials', ..._materials];
 
   List<RecipeModel> get _filteredRecipes {
     if (_selectedMaterial == null) return _ctrl.recipes;
-    return _ctrl.recipes.where((r) => r.material == _selectedMaterial).toList();
+    return _ctrl.recipes.where((recipe) => recipe.material == _selectedMaterial).toList();
   }
 
   @override
@@ -53,22 +46,36 @@ class _RecipeScreenState extends State<RecipeScreen> {
   @override
   Widget build(BuildContext context) {
     final r = Responsive(displayConfig, MediaQuery.of(context).size);
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
     final selectedMaterialIndex =
         _selectedMaterial == null ? 0 : _materialOptions.indexOf(_selectedMaterial!);
 
     return ListenableBuilder(
       listenable: _ctrl,
       builder: (context, _) {
+        final filteredRecipes = _filteredRecipes;
+        RecipeModel? selectedRecipe;
+
+        if (_ctrl.selected != null) {
+          for (final recipe in filteredRecipes) {
+            if (recipe.id == _ctrl.selected!.id) {
+              selectedRecipe = recipe;
+              break;
+            }
+          }
+        }
+
         return Padding(
           padding: const EdgeInsets.all(AppSizes.md),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Match the login screen dropdown styling for material filtering.
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.all(r.scaled(12)),
                 decoration: BoxDecoration(
                   color: r.bgDark(),
+                  borderRadius: BorderRadius.circular(r.scaled(AppSizes.cardRadius)),
                   border: Border.all(color: r.borderDark(), width: 2),
                 ),
                 child: SpinBox(
@@ -78,9 +85,14 @@ class _RecipeScreenState extends State<RecipeScreen> {
                   onChanged: (index) {
                     setState(() {
                       _selectedMaterial = index == 0 ? null : _materialOptions[index];
-                      if (_ctrl.selected != null &&
-                          !_filteredRecipes.contains(_ctrl.selected)) {
-                        _ctrl.select(_filteredRecipes.first);
+                      final nextFilteredRecipes = _filteredRecipes;
+                      if (nextFilteredRecipes.isEmpty) return;
+
+                      if (_ctrl.selected == null ||
+                          !nextFilteredRecipes.any(
+                            (recipe) => recipe.id == _ctrl.selected!.id,
+                          )) {
+                        _ctrl.select(nextFilteredRecipes.first);
                       }
                     });
                   },
@@ -88,56 +100,68 @@ class _RecipeScreenState extends State<RecipeScreen> {
                 ),
               ),
               const SizedBox(height: AppSizes.sm),
-              // Recipe list — takes remaining space
               Expanded(
-                child: ListView.builder(
-                  itemCount: _filteredRecipes.length,
-                  itemBuilder: (context, i) {
-                    final r = _filteredRecipes[i];
-                    final selected = r.id == _ctrl.selected?.id;
-                    return Card(
-                      color: selected
-                          ? AppColors.primaryLight.withValues(alpha: 0.15)
-                          : null,
-                      child: ListTile(
-                        leading: Icon(
-                          r.isLocked ? Icons.lock : Icons.science,
-                          color: selected ? AppColors.primary : null,
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    if (filteredRecipes.isEmpty)
+                      InfoCard(
+                        title: 'No Recipes',
+                        icon: Icons.search_off_rounded,
+                        child: Text(
+                          'No recipes match the selected material filter.',
+                          style: AppTextStyles.bodyMedium,
                         ),
-                        title: Text(r.name, style: AppTextStyles.bodyLarge),
-                        subtitle: Text(
-                          '${r.material}  •  ${r.tubeSize}  •  ${r.temperatureFormatted}  •  ${r.sealTimeFormatted}',
-                          style: AppTextStyles.caption,
+                      )
+                    else
+                      ...filteredRecipes.map((recipe) {
+                        final selected = recipe.id == _ctrl.selected?.id;
+
+                        return Card(
+                          color: selected
+                              ? (isDarkTheme
+                                  ? AppColors.selectedSurface.withValues(alpha: 0.78)
+                                  : AppColors.primaryLight.withValues(alpha: 0.15))
+                              : null,
+                          shadowColor: isDarkTheme ? AppColors.activeAccent : null,
+                          child: ListTile(
+                            leading: Icon(
+                              recipe.isLocked ? Icons.lock : Icons.science,
+                              color: selected
+                                  ? (isDarkTheme ? AppColors.activeAccent : AppColors.primary)
+                                  : (isDarkTheme ? AppColors.inactiveAccent : null),
+                            ),
+                            title: Text(recipe.name, style: AppTextStyles.bodyLarge),
+                            subtitle: Text(
+                              '${recipe.material} | ${recipe.tubeSize} | ${recipe.temperatureFormatted} | ${recipe.sealTimeFormatted}',
+                              style: AppTextStyles.caption,
+                            ),
+                            selected: selected,
+                            onTap: () => _ctrl.select(recipe),
+                          ),
+                        );
+                      }),
+                    if (selectedRecipe != null) ...[
+                      const SizedBox(height: AppSizes.sm),
+                      InfoCard(
+                        title: AppStrings.recipeDetails,
+                        icon: Icons.info_outline,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _DetailRow('Name', selectedRecipe.name),
+                            _DetailRow('Material', selectedRecipe.material),
+                            _DetailRow('Tube Size', selectedRecipe.tubeSize),
+                            _DetailRow('Temperature', selectedRecipe.temperatureFormatted),
+                            _DetailRow('Seal Time', selectedRecipe.sealTimeFormatted),
+                            _DetailRow('Locked', selectedRecipe.isLocked ? 'Yes' : 'No'),
+                          ],
                         ),
-                        selected: selected,
-                        onTap: () => _ctrl.select(r),
                       ),
-                    );
-                  },
+                    ],
+                  ],
                 ),
               ),
-              // Details panel — natural height, no Expanded
-              if (_ctrl.selected != null) ...[
-                const SizedBox(height: AppSizes.sm),
-                InfoCard(
-                  title: AppStrings.recipeDetails,
-                  icon: Icons.info_outline,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _DetailRow('Name', _ctrl.selected!.name),
-                      _DetailRow('Material', _ctrl.selected!.material),
-                      _DetailRow('Tube Size', _ctrl.selected!.tubeSize),
-                      _DetailRow('Temperature',
-                          _ctrl.selected!.temperatureFormatted),
-                      _DetailRow('Seal Time',
-                          _ctrl.selected!.sealTimeFormatted),
-                      _DetailRow('Locked',
-                          _ctrl.selected!.isLocked ? 'Yes' : 'No'),
-                    ],
-                  ),
-                ),
-              ],
             ],
           ),
         );
@@ -149,6 +173,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
 class _DetailRow extends StatelessWidget {
   final String label;
   final String value;
+
   const _DetailRow(this.label, this.value);
 
   @override
@@ -156,10 +181,24 @@ class _DetailRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: AppTextStyles.bodyMedium),
-          Text(value, style: AppTextStyles.bodyLarge),
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: Text(label, style: AppTextStyles.bodyMedium),
+            ),
+          ),
+          Expanded(
+            flex: 5,
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              softWrap: true,
+              style: AppTextStyles.bodyLarge,
+            ),
+          ),
         ],
       ),
     );

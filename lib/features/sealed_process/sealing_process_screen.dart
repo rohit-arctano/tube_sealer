@@ -1,5 +1,6 @@
 // lib/features/sealed_process/sealing_process_screen.dart
 import 'package:flutter/material.dart';
+import '../../app/constants/app_sizes.dart';
 import '../../app/theme/app_colors.dart';
 import '../../core/config/display_config.dart';
 import '../../core/models/sealing_models.dart';
@@ -84,6 +85,8 @@ class _SealingProcessScreenState extends State<SealingProcessScreen> {
                 width: double.infinity,
                 padding: EdgeInsets.all(r.scaled(12)),
                 decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(r.scaled(AppSizes.cardRadius)),
                   border: Border.all(color: r.borderDark(), width: 1),
                 ),
                 child: Column(
@@ -143,8 +146,12 @@ class _SealingProcessScreenState extends State<SealingProcessScreen> {
                                 setState(() => _isProcessing = true);
                                 await _machine.startProcess();
                               },
+                        borderRadius: BorderRadius.circular(r.scaled(AppSizes.buttonRadius)),
                         child: Container(
                           decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              r.scaled(AppSizes.buttonRadius),
+                            ),
                             border: Border.all(
                               color: _isProcessing
                                   ? AppColors.disabled
@@ -179,8 +186,12 @@ class _SealingProcessScreenState extends State<SealingProcessScreen> {
                                 setState(() => _isProcessing = false);
                               }
                             : null,
+                        borderRadius: BorderRadius.circular(r.scaled(AppSizes.buttonRadius)),
                         child: Container(
                           decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              r.scaled(AppSizes.buttonRadius),
+                            ),
                             border: Border.all(
                               color: _isProcessing
                                   ? r.textLight()
