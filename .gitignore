@@ -5,7 +5,6 @@
 *.swp
 .DS_Store
 .atom/
-./bin
 .build/
 .buildlog/
 .history
@@ -32,6 +31,7 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+/bin/
 /coverage/
 
 # Symbolication related

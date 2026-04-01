@@ -1,5 +1,6 @@
 // lib/features/sealed_process/sealing_process_screen.dart
 import 'package:flutter/material.dart';
+import '../../app/theme/app_colors.dart';
 import '../../core/config/display_config.dart';
 import '../../core/models/sealing_models.dart';
 import '../../core/services/responsive_service.dart';
@@ -46,7 +47,7 @@ class _SealingProcessScreenState extends State<SealingProcessScreen> {
 
   void _updateTimestamp() {
     final now = DateTime.now();
-    _timestamp = 
+    _timestamp =
         '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year} '
         '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}';
   }
@@ -112,7 +113,7 @@ class _SealingProcessScreenState extends State<SealingProcessScreen> {
                 ProgressPhase(
                   label: _currentUpdate!.label,
                   progress: _currentUpdate!.progress,
-                  timeRemaining: 
+                  timeRemaining:
                       _currentUpdate!.timeRemainingSeconds > 0
                           ? '${_currentUpdate!.timeRemainingSeconds}s'
                           : null,
@@ -146,7 +147,7 @@ class _SealingProcessScreenState extends State<SealingProcessScreen> {
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: _isProcessing
-                                  ? Colors.grey
+                                  ? AppColors.disabled
                                   : r.textLight(),
                               width: 2,
                             ),
@@ -156,7 +157,7 @@ class _SealingProcessScreenState extends State<SealingProcessScreen> {
                               Icons.play_arrow,
                               size: r.scaled(32),
                               color: _isProcessing
-                                  ? Colors.grey
+                                  ? AppColors.disabled
                                   : r.textLight(),
                             ),
                           ),
@@ -183,7 +184,7 @@ class _SealingProcessScreenState extends State<SealingProcessScreen> {
                             border: Border.all(
                               color: _isProcessing
                                   ? r.textLight()
-                                  : Colors.grey,
+                                  : AppColors.disabled,
                               width: 2,
                             ),
                           ),
@@ -193,7 +194,7 @@ class _SealingProcessScreenState extends State<SealingProcessScreen> {
                               height: r.scaled(16),
                               color: _isProcessing
                                   ? r.textLight()
-                                  : Colors.grey,
+                                  : AppColors.disabled,
                             ),
                           ),
                         ),

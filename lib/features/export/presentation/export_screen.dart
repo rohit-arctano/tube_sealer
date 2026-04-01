@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
 import '../../../app/widgets/machine_primary_button.dart';
 import '../../../core/config/display_config.dart';
@@ -45,7 +46,7 @@ class _ExportScreenState extends State<ExportScreen> {
     final r = Responsive(displayConfig, MediaQuery.of(context).size);
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(r.scaled(12)),
@@ -134,7 +135,8 @@ class _ExportField extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(r.scaled(10)),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.white, width: 2),
+        color: AppColors.surface,
+        border: Border.all(color: AppColors.divider, width: 2),
       ),
       child: Row(
         children: [
@@ -150,7 +152,7 @@ class _ExportField extends StatelessWidget {
           ),
           IconButton(
             onPressed: onTap,
-            icon: Icon(icon, color: Colors.white, size: r.scaled(22)),
+            icon: Icon(icon, color: AppColors.primaryLight, size: r.scaled(22)),
           ),
         ],
       ),

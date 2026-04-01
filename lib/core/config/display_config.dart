@@ -22,9 +22,9 @@ class DisplayConfig {
     required this.baselineWidth,
     required this.baselineHeight,
     required this.accentColor,
-    this.bgDark = const Color(0xFF111111),
-    this.textLight = const Color(0xFFFFFFFF),
-    this.borderDark = const Color(0xFF666666),
+    this.bgDark = const Color(0xFF020B21),
+    this.textLight = const Color(0xFFF7FAFF),
+    this.borderDark = const Color(0xFF3A5FC9),
   });
 
   double get physicalDpi {
@@ -42,9 +42,9 @@ const DisplayConfig displayConfig = DisplayConfig(
   minTouchDp: 64.0,
   baselineWidth: 360.0,
   baselineHeight: 640.0,
-  accentColor: Color(0xFFFFFFFF),
-  bgDark: Color(0xFF111111),
-  textLight: Color(0xFFFFFFFF),
-  borderDark: Color(0xFFFFFFFF),
+  accentColor: Color(0xFF0734A6),
+  bgDark: Color(0xFF020B21),
+  textLight: Color(0xFFF7FAFF),
+  borderDark: Color(0xFF3A5FC9),
 );
 

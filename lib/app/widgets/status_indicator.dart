@@ -20,7 +20,7 @@ class StatusIndicator extends StatelessWidget {
           height: 14,
           decoration: BoxDecoration(
             color: color,
-            border: Border.all(color: Colors.white, width: 1.5),
+            border: Border.all(color: AppColors.divider, width: 1.5),
           ),
         ),
         const SizedBox(width: 8),

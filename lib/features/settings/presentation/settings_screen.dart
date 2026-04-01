@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../app/theme/app_colors.dart';
+import '../../../app/theme/app_theme_controller.dart';
 import '../../../app/theme/app_text_styles.dart';
 import '../../../app/widgets/machine_primary_button.dart';
 import '../../../core/config/display_config.dart';
@@ -15,7 +17,6 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   late final SettingsController _ctrl;
-  bool _isDarkTheme = false;
 
   @override
   void initState() {
@@ -39,7 +40,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.black,
+        backgroundColor: AppColors.surface,
         title: Text(
           'Change Password',
           style: AppTextStyles.sectionTitle,
@@ -62,12 +63,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onPressed: () => Navigator.of(context).pop(),
               style: OutlinedButton.styleFrom(
                 padding: EdgeInsets.zero,
-                side: const BorderSide(color: Colors.white, width: 2),
+                side: BorderSide(color: AppColors.divider, width: 2),
                 shape: const RoundedRectangleBorder(),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.close,
-                color: Colors.white,
+                color: AppColors.textPrimary,
               ),
             ),
           ),
@@ -86,78 +87,83 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _toggleTheme(bool isDark) {
-    setState(() {
-      _isDarkTheme = isDark;
-    });
+    AppThemeController.instance.setDarkMode(isDark);
   }
 
   @override
   Widget build(BuildContext context) {
     final r = Responsive(displayConfig, MediaQuery.of(context).size);
+    final themeController = AppThemeController.instance;
 
     return ListenableBuilder(
       listenable: _ctrl,
       builder: (context, _) {
-        return SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(
-            r.scaled(10),
-            0,
-            r.scaled(10),
-            r.scaled(10),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _SettingsPanel(
-                title: 'Theme',
-                r: r,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _SettingsToggleButton(
-                        label: 'Light',
-                        selected: !_isDarkTheme,
-                        onTap: () => _toggleTheme(false),
-                      ),
+        return ListenableBuilder(
+          listenable: themeController,
+          builder: (context, __) {
+            final isDarkTheme = themeController.isDarkMode;
+            return SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(
+                r.scaled(10),
+                0,
+                r.scaled(10),
+                r.scaled(10),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _SettingsPanel(
+                    title: 'Theme',
+                    r: r,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: _SettingsToggleButton(
+                            label: 'Light',
+                            selected: !isDarkTheme,
+                            onTap: () => _toggleTheme(false),
+                          ),
+                        ),
+                        SizedBox(width: r.scaled(8)),
+                        Expanded(
+                          child: _SettingsToggleButton(
+                            label: 'Dark',
+                            selected: isDarkTheme,
+                            onTap: () => _toggleTheme(true),
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(width: r.scaled(8)),
-                    Expanded(
-                      child: _SettingsToggleButton(
-                        label: 'Dark',
-                        selected: _isDarkTheme,
-                        onTap: () => _toggleTheme(true),
-                      ),
+                  ),
+                  SizedBox(height: r.scaled(10)),
+                  MachinePrimaryButton(
+                    label: 'Change Password',
+                    icon: Icons.lock,
+                    onPressed: _changePassword,
+                  ),
+                  SizedBox(height: r.scaled(10)),
+                  MachinePrimaryButton(
+                    label: 'Logout',
+                    icon: Icons.logout,
+                    onPressed: _logout,
+                  ),
+                  SizedBox(height: r.scaled(10)),
+                  _SettingsPanel(
+                    title: 'About',
+                    r: r,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('ASL Tube Sealer', style: AppTextStyles.bodyLarge),
+                        SizedBox(height: r.scaled(6)),
+                        Text('Version: ${_ctrl.version}', style: AppTextStyles.bodyMedium),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              SizedBox(height: r.scaled(10)),
-              MachinePrimaryButton(
-                label: 'Change Password',
-                icon: Icons.lock,
-                onPressed: _changePassword,
-              ),
-              SizedBox(height: r.scaled(10)),
-              MachinePrimaryButton(
-                label: 'Logout',
-                icon: Icons.logout,
-                onPressed: _logout,
-              ),
-              SizedBox(height: r.scaled(10)),
-              _SettingsPanel(
-                title: 'About',
-                r: r,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('ASL Tube Sealer', style: AppTextStyles.bodyLarge),
-                    SizedBox(height: r.scaled(6)),
-                    Text('Version: ${_ctrl.version}', style: AppTextStyles.bodyMedium),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
@@ -180,7 +186,8 @@ class _SettingsPanel extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(r.scaled(12)),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.white, width: 2),
+        color: AppColors.surface,
+        border: Border.all(color: AppColors.divider, width: 2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,13 +220,13 @@ class _SettingsToggleButton extends StatelessWidget {
         height: 48,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: selected ? Colors.white : Colors.black,
-          border: Border.all(color: Colors.white, width: 2),
+          color: selected ? AppColors.primary : AppColors.surfaceVariant,
+          border: Border.all(color: AppColors.divider, width: 2),
         ),
         child: Text(
           label,
           style: AppTextStyles.bodyMedium.copyWith(
-            color: selected ? Colors.black : Colors.white,
+            color: selected ? AppColors.textOnPrimary : AppColors.textPrimary,
           ),
         ),
       ),
@@ -238,11 +245,12 @@ class _PasswordField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: label,
         labelStyle: AppTextStyles.caption,
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white, width: 2),
+        fillColor: AppColors.surfaceVariant,
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AppColors.divider, width: 2),
         ),
         focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white, width: 2),
+          borderSide: BorderSide(color: AppColors.primaryLight, width: 2),
         ),
       ),
       style: AppTextStyles.bodyMedium,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
 import '../../../app/widgets/machine_primary_button.dart';
 import '../../../core/config/display_config.dart';
@@ -52,7 +53,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     final r = Responsive(displayConfig, MediaQuery.of(context).size);
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(r.scaled(12)),
@@ -82,7 +83,8 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                       margin: EdgeInsets.only(bottom: r.scaled(8)),
                       padding: EdgeInsets.all(r.scaled(10)),
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white, width: 2),
+                        color: AppColors.surface,
+                        border: Border.all(color: AppColors.divider, width: 2),
                       ),
                       child: Row(
                         children: [
@@ -145,9 +147,10 @@ class _ActionSquareButton extends StatelessWidget {
         width: r.scaled(40),
         height: r.scaled(40),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.white, width: 2),
+          color: AppColors.surfaceVariant,
+          border: Border.all(color: AppColors.divider, width: 2),
         ),
-        child: Icon(icon, color: Colors.white, size: r.scaled(20)),
+        child: Icon(icon, color: AppColors.primaryLight, size: r.scaled(20)),
       ),
     );
   }
@@ -179,7 +182,7 @@ class _AddUserDialogState extends State<AddUserDialog> {
         UserRole.values.map((role) => role.toString().split('.').last).toList();
 
     return AlertDialog(
-      backgroundColor: r.bgDark(),
+      backgroundColor: AppColors.surface,
       title: Text(
         'Add User',
         style: TextStyle(fontSize: 24, color: r.textLight()),

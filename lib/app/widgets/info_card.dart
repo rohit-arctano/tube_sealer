@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/app_sizes.dart';
+import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 
 /// Reference-style framed panel with a title row and body content.
@@ -24,8 +25,8 @@ class InfoCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 6),
       padding: const EdgeInsets.all(AppSizes.cardPadding),
       decoration: BoxDecoration(
-        color: Colors.black,
-        border: Border.all(color: Colors.white, width: 2),
+        color: AppColors.surface,
+        border: Border.all(color: AppColors.divider, width: 2),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -34,7 +35,7 @@ class InfoCard extends StatelessWidget {
           Row(
             children: [
               if (icon != null) ...[
-                Icon(icon, size: 18, color: accentColor ?? Colors.white),
+                Icon(icon, size: 18, color: accentColor ?? AppColors.primaryLight),
                 const SizedBox(width: 8),
               ],
               Text(title, style: AppTextStyles.sectionTitle),

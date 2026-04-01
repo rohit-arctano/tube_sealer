@@ -1,6 +1,7 @@
 // lib/core/services/responsive_service.dart
 import 'dart:math';
 import 'package:flutter/widgets.dart';
+import '../../app/theme/app_colors.dart';
 import '../config/display_config.dart';
 
 /// Responsive helper that scales all UI values based on screen size and config baseline.
@@ -23,15 +24,15 @@ class Responsive {
   /// Ensures a minimum size for gloved/resistive touch.
   double touchTargetDp() => max(cfg.minTouchDp, scaled(56.0));
 
-  /// Shortcut: accent color from config.
-  Color accentColor() => cfg.accentColor;
+  /// Shortcut: active accent color from the current theme.
+  Color accentColor() => AppColors.primary;
 
-  /// Shortcut: dark background color.
-  Color bgDark() => cfg.bgDark;
+  /// Shortcut: active screen background color.
+  Color bgDark() => AppColors.background;
 
-  /// Shortcut: light text color.
-  Color textLight() => cfg.textLight;
+  /// Shortcut: primary readable text color for the current theme.
+  Color textLight() => AppColors.textPrimary;
 
-  /// Shortcut: border color.
-  Color borderDark() => cfg.borderDark;
+  /// Shortcut: border color for the current theme.
+  Color borderDark() => AppColors.divider;
 }

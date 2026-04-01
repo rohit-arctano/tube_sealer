@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../app/constants/app_strings.dart';
+import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
 import '../../../core/config/display_config.dart';
 import '../../../core/services/responsive_service.dart';
@@ -56,13 +57,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           child: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: selected ? Colors.white : Colors.black,
-                              border: Border.all(color: Colors.white, width: 2),
+                              color: selected ? AppColors.primary : AppColors.surface,
+                              border: Border.all(color: AppColors.divider, width: 2),
                             ),
                             child: Text(
                               filter,
                               style: AppTextStyles.bodyMedium.copyWith(
-                                color: selected ? Colors.black : Colors.white,
+                                color: selected
+                                    ? AppColors.textOnPrimary
+                                    : AppColors.textPrimary,
                               ),
                             ),
                           ),
@@ -79,7 +82,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   vertical: r.scaled(10),
                 ),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 2),
+                  color: AppColors.surfaceVariant,
+                  border: Border.all(color: AppColors.divider, width: 2),
                 ),
                 child: Row(
                   children: const [
@@ -101,9 +105,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         horizontal: r.scaled(10),
                         vertical: r.scaled(10),
                       ),
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         border: Border(
-                          bottom: BorderSide(color: Colors.white, width: 1),
+                          bottom: BorderSide(color: AppColors.divider, width: 1),
                         ),
                       ),
                       child: Row(

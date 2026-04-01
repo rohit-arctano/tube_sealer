@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../app/constants/app_strings.dart';
+import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_text_styles.dart';
 import '../../../../app/widgets/info_card.dart';
 
@@ -18,7 +19,7 @@ class CycleCounterCard extends StatelessWidget {
           Expanded(
             child: _Counter(label: AppStrings.todayLabel, value: today),
           ),
-          Container(width: 1, height: 40, color: const Color(0xFFFFFFFF)),
+          Container(width: 1, height: 40, color: AppColors.divider),
           Expanded(
             child: _Counter(label: AppStrings.totalLabel, value: total),
           ),

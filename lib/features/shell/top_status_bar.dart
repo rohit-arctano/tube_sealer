@@ -39,7 +39,7 @@ class TopStatusBar extends StatelessWidget {
             height: 32,
             width: 32,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.textPrimary,
               borderRadius: BorderRadius.circular(8),
             ),
             padding: const EdgeInsets.all(3),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../app/constants/app_strings.dart';
+import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
 import '../../../app/widgets/machine_primary_button.dart';
 import '../../../core/config/display_config.dart';
@@ -59,7 +60,8 @@ class _AlarmScreenState extends State<AlarmScreen> {
               Container(
                 padding: EdgeInsets.all(r.scaled(12)),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 2),
+                  color: AppColors.surfaceVariant,
+                  border: Border.all(color: AppColors.divider, width: 2),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,7 +76,8 @@ class _AlarmScreenState extends State<AlarmScreen> {
               Container(
                 padding: EdgeInsets.all(r.scaled(12)),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 2),
+                  color: AppColors.surface,
+                  border: Border.all(color: AppColors.divider, width: 2),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

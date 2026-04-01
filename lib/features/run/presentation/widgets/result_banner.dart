@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_text_styles.dart';
 import '../../../../core/models/cycle_result.dart';
 
@@ -12,17 +13,19 @@ class ResultBanner extends StatelessWidget {
 
     final isPass = result == CycleResult.success;
     final icon = isPass ? Icons.check_circle_outline : Icons.error_outline;
+    final accentColor = isPass ? AppColors.success : AppColors.error;
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.white, width: 2),
+        color: AppColors.surface,
+        border: Border.all(color: accentColor, width: 2),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: Colors.white, size: 32),
+          Icon(icon, color: accentColor, size: 32),
           const SizedBox(width: 12),
           Text(
             result.label,

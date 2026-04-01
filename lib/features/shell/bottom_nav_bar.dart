@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../app/theme/app_colors.dart';
 import '../../core/config/display_config.dart';
 import '../../core/services/responsive_service.dart';
 import '../../app/constants/app_strings.dart';
@@ -98,11 +99,14 @@ class _NavItem extends StatelessWidget {
               height: r.scaled(34),
               decoration: BoxDecoration(
                 color: isSelected ? r.accentColor() : Colors.transparent,
-                border: Border.all(color: r.textLight(), width: 2),
+                border: Border.all(
+                  color: isSelected ? AppColors.primaryLight : r.textLight(),
+                  width: 2,
+                ),
               ),
               child: Icon(
                 icon,
-                color: isSelected ? Colors.black : r.textLight(),
+                color: isSelected ? AppColors.textOnPrimary : r.textLight(),
                 size: r.scaled(18),
               ),
             ),

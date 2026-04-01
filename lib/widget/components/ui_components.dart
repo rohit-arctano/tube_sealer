@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../app/theme/app_colors.dart';
 import '../../core/services/responsive_service.dart';
 
 /// Header bar with timestamp, title, and username styled like the references.
@@ -124,7 +125,7 @@ class ProgressPhase extends StatelessWidget {
           width: double.infinity,
           height: r.scaled(34),
           decoration: BoxDecoration(
-            color: Colors.black,
+            color: AppColors.surfaceVariant,
             border: Border.all(color: r.borderDark(), width: 2),
           ),
           child: Align(
@@ -206,7 +207,7 @@ class _ActionIconButton extends StatelessWidget {
               child: Icon(
                 icon,
                 size: r.scaled(28),
-                color: Colors.black,
+                color: AppColors.textOnPrimary,
               ),
             ),
           ),
@@ -246,7 +247,7 @@ class IconGrid extends StatelessWidget {
           onTap: () => onItemTap?.call(i),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.black,
+              color: AppColors.surface,
               border: Border.all(color: r.borderDark(), width: 2),
             ),
             child: Column(
@@ -259,7 +260,7 @@ class IconGrid extends StatelessWidget {
                   child: Icon(
                     item.icon,
                     size: r.scaled(26),
-                    color: Colors.black,
+                    color: AppColors.textOnPrimary,
                   ),
                 ),
                 SizedBox(height: r.scaled(8)),
@@ -350,7 +351,7 @@ class _SpinBoxState extends State<SpinBox> {
         Container(
           height: widget.r.scaled(48),
           decoration: BoxDecoration(
-            color: widget.r.bgDark(),
+            color: AppColors.surface,
             border: Border.all(color: widget.r.borderDark(), width: 2),
           ),
           child: Row(
@@ -391,7 +392,7 @@ class _SpinBoxState extends State<SpinBox> {
                     alignment: Alignment.center,
                     child: Icon(
                       Icons.arrow_drop_down,
-                      color: Colors.black,
+                      color: AppColors.textOnPrimary,
                       size: widget.r.scaled(28),
                     ),
                   ),
@@ -409,7 +410,7 @@ class _SpinBoxState extends State<SpinBox> {
                 ? Container(
                     margin: EdgeInsets.only(top: widget.r.scaled(6)),
                     decoration: BoxDecoration(
-                      color: widget.r.bgDark(),
+                      color: AppColors.surface,
                       border: Border.all(color: widget.r.borderDark(), width: 2),
                     ),
                     child: ListView.builder(
@@ -439,7 +440,9 @@ class _SpinBoxState extends State<SpinBox> {
                             child: Text(
                               widget.options[i],
                               style: TextStyle(
-                                color: selected ? Colors.black : widget.r.textLight(),
+                                color: selected
+                                    ? AppColors.textOnPrimary
+                                    : widget.r.textLight(),
                                 fontSize: widget.r.scaled(16),
                                 fontWeight: selected ? FontWeight.w700 : FontWeight.normal,
                                 fontFamily: 'monospace',

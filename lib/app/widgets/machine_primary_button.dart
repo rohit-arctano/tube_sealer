@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/app_sizes.dart';
+import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 
 /// Large, square, industrial-style primary action button.
@@ -25,9 +26,9 @@ class MachinePrimaryButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
-          backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
-          side: BorderSide(color: color ?? Colors.white, width: 2),
+          backgroundColor: AppColors.surface,
+          foregroundColor: AppColors.textPrimary,
+          side: BorderSide(color: color ?? AppColors.divider, width: 2),
           shape: const RoundedRectangleBorder(),
         ),
         child: Row(

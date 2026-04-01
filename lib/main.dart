@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tube_sealer/features/auth/login_screen.dart';
 import 'app/theme/app_theme.dart';
+import 'app/theme/app_theme_controller.dart';
 import 'core/services/mock_machine_service.dart';
 import 'core/services/screen_rotation_service.dart';
 import 'features/shell/main_shell_screen.dart';
@@ -9,7 +10,7 @@ import 'features/shell/main_shell_screen.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Allow all orientations — rotation is handled in-app via RotatedBox.
+  // Allow all orientations - rotation is handled in-app via RotatedBox.
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.landscapeLeft,
@@ -33,6 +34,7 @@ class TubeSealerApp extends StatefulWidget {
 class _TubeSealerAppState extends State<TubeSealerApp> {
   final _machineService = MockMachineService();
   final _rotation = ScreenRotationService();
+  final _themeController = AppThemeController.instance;
   bool _semanticsReady = false;
 
   @override
@@ -58,21 +60,28 @@ class _TubeSealerAppState extends State<TubeSealerApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Kairish Tube Sealer',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
-      initialRoute: '/login',
-      routes: {
-        // '/demo': (context) => const DemoHomeScreen(),
-        '/login': (context) => LoginScreen(),
-        '/shell': (context) => ExcludeSemantics(
-          excluding: !_semanticsReady,
-          child: RotatedBox(
-            quarterTurns: _rotation.quarterTurns,
-            child: MainShellScreen(machineService: _machineService),
-          ),
-        ),
+    return ListenableBuilder(
+      listenable: _themeController,
+      builder: (context, _) {
+        return MaterialApp(
+          title: 'Kairish Tube Sealer',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.light,
+          darkTheme: AppTheme.dark,
+          themeMode: _themeController.themeMode,
+          initialRoute: '/login',
+          routes: {
+            // '/demo': (context) => const DemoHomeScreen(),
+            '/login': (context) => LoginScreen(),
+            '/shell': (context) => ExcludeSemantics(
+                  excluding: !_semanticsReady,
+                  child: RotatedBox(
+                    quarterTurns: _rotation.quarterTurns,
+                    child: MainShellScreen(machineService: _machineService),
+                  ),
+                ),
+          },
+        );
       },
     );
   }

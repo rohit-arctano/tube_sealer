@@ -1,5 +1,6 @@
 // lib/features/auth/login_screen.dart
 import 'package:flutter/material.dart';
+import '../../app/theme/app_colors.dart';
 import '../../core/config/display_config.dart';
 import '../../core/services/responsive_service.dart';
 import '../../widget/components/ui_components.dart';
@@ -175,7 +176,7 @@ class _NumericKeyboardDialogState extends State<_NumericKeyboardDialog> {
     final keySpacing = widget.r.scaled(6);
 
     return Dialog(
-      backgroundColor: widget.r.bgDark(),
+      backgroundColor: AppColors.surface,
       insetPadding: EdgeInsets.all(widget.r.scaled(10)),
       child: ConstrainedBox(
         constraints: BoxConstraints(
@@ -302,14 +303,14 @@ class _NumericKeyboardDialogState extends State<_NumericKeyboardDialog> {
                         _DialogActionButton(
                           r: widget.r,
                           backgroundColor: widget.r.accentColor(),
-                          iconColor: Colors.black,
+                          iconColor: AppColors.textOnPrimary,
                           icon: Icons.check,
                           onTap: () => widget.onSubmit(_currentValue),
                         ),
                         _DialogActionButton(
                           r: widget.r,
-                          backgroundColor: widget.r.bgDark(),
-                          iconColor: widget.r.textLight(),
+                          backgroundColor: AppColors.surfaceVariant,
+                          iconColor: AppColors.textPrimary,
                           icon: Icons.close,
                           onTap: () => Navigator.pop(context),
                         ),
@@ -352,7 +353,7 @@ class _DialogActionButton extends StatelessWidget {
           onTap: onTap,
           child: Container(
             decoration: BoxDecoration(
-              border: Border.all(color: r.textLight(), width: 2),
+              border: Border.all(color: AppColors.divider, width: 2),
               color: backgroundColor,
             ),
             child: Center(
